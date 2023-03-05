@@ -3,11 +3,18 @@
 #include <stdlib.h>
 #include <string.h>
 
+typedef struct registoPos {
+	char word1[19];
+	char word2[19];
+	char word3[19];
+} Posicao;
+
 typedef struct registo {
 	int codigo;
 	char tipo[50];
 	float bateria;
 	float autonomia;
+	Posicao posicao[1];			// posição do meio através de 3 palavras (what3words.com)
 	struct registo* seguinte;	// endereço de memória para uma strucr registo
 } Meio;
 
