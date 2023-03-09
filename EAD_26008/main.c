@@ -54,16 +54,35 @@ typedef struct registoAluguer {
 	struct registoAluguer* seguinte;
 } Aluguer;
 
-int login() {
-	char utilizador[20], password[4];
 
-	printf("Utilizador:\n");
-	scanf("%[^\n]s", utilizador);
-	scanf("%*c");					// !!! Se possível ver outra solução para não passar à frente !!!
-	printf("Password:\n");
-	scanf("%[^\n]s", password);
-	scanf("%*c"); 
+
+Utilizador* inserirUtilizador(Utilizador* inicio, int codigo, char utilizador[], char nome[], char password[], float saldo, Data dataNascimento, int NIF, char morada[], int gestor) {
+	int i0 = 0;
+	int a = dataNascimento.ano;
+	int i1 = 1; 
 	
+	Utilizador* novo = malloc(sizeof(struct registoUtilizador));
+	if (novo != NULL)
+	{
+		novo->codigo = codigo;
+		strcpy(novo->utilizador, utilizador);
+		strcpy(novo->nome, nome);
+		strcpy(novo->password, password);
+		novo->saldo = saldo;
+		novo->dataNascimento.ano = dataNascimento.ano;
+		novo->dataNascimento.mes = dataNascimento.mes;
+		novo->dataNascimento.dia = dataNascimento.dia;
+		novo->NIF = NIF;
+		strcpy(novo->morada, morada);
+		novo->gestor = gestor;
+		novo->seguinte = inicio;
+		return(novo);
+	}
+
+}
+
+Utilizador* lerUtilizadores()
+{
 	FILE* fp;
 	int fcodigo;
 	char futilizador[20];
@@ -75,6 +94,8 @@ int login() {
 	char fmorada[50];
 	int fgestor;
 
+	Utilizador* aux = NULL;
+
 	fp = fopen("dados/utilizadores.txt", "r");
 	if (fp != NULL)
 	{
@@ -83,30 +104,102 @@ int login() {
 			int check = fscanf(fp, "%d;%[^;];%[^;];%[^;];%f;%d-%d-%d;%d;%[^;];%d\n", &fcodigo, futilizador, fnome, fpassword, &fsaldo, &fdataNascimento.ano, &fdataNascimento.mes, &fdataNascimento.dia, &fNIF, fmorada, &fgestor);
 			if (check != 11) {
 				printf("\n\n\n////////////////// ERRO //////////////////\n\n\n");
-				return 0;
+				return NULL;
 			}
-
-			int a = 0;
+			else {
+				aux = inserirUtilizador(aux, fcodigo, futilizador, fnome, fpassword, fsaldo, fdataNascimento, fNIF, fmorada, fgestor);
+			}
 		}
 		fclose(fp);
 	}
+	return(aux);
+}
 
-	if (!strcmp(utilizador, futilizador) && !strcmp(password, fpassword))
+void listarUtilizador(Utilizador* inicio)
+{
+	while (inicio != NULL)
 	{
-		return 1;
+		printf("%d %s %.2f %d-%d-%d\n", inicio->codigo, inicio->nome, inicio->saldo, inicio->dataNascimento.dia, inicio->dataNascimento.mes, inicio->dataNascimento.ano);
+		printf("////////////////////////////////////////////////////////////////\n");
+		inicio = inicio->seguinte;
+	}
+}
+
+
+int login(Utilizador* inicio, int *utilizadorAtual, char *nomeAtual, int* gestor) {
+
+	int sucesso=0;
+	char utilizador[20], password[4];
+
+	while(!sucesso){
+
+		printf("Utilizador:\n");
+		scanf("%[^\n]s", utilizador);
+		scanf("%*c");					// !!! Se possível ver outra solução para não passar à frente !!!
+		printf("Password:\n");
+		scanf("%3s", password);			// !!! A ler os primeiros 3 caracteres da passe introduzida alterar na versão final !!!
+		scanf("%*c");
+
+		while (inicio != NULL)
+		{
+			int a = 0;
+			if (!strcmp(utilizador, inicio->utilizador) && !strcmp(password, inicio->password))
+			{
+				*gestor = inicio->gestor;
+				*utilizadorAtual = inicio->codigo;
+
+				strcpy(nomeAtual, inicio->nome);
+				sucesso = 1;
+			}
+			inicio = inicio->seguinte;
+		}
+		system("cls");
+		if (sucesso == 0)
+			printf("\n------ERRO------\n\n");
 	}
 
-	int a = 0;
+	printf("\n------LOGIN------\n\n");
 
-	return 0;
+	return 1;
 }
 
 main() {
 	//Fazer com listas ligadas porque ocupam menos espaço na memória, porque não é necessário dedicar memória ao definir a sruct
 	//cada "meio" regista o endereço do próximo "meio"
 
-	//Meio m;
+	//Carregar utilizadores
+	//Fazer login
+	//Carregar
 
-	//int a = m.codigo;
-	printf("\n\nLogin? %d\n", login());
+	Utilizador* utilizadores = NULL;			// Lista ligada vazia 
+	int utilizadorAtual = 0, gestor = 0;		//Dados da sessão
+	char nomeAtual[50] = {'t', 'e', 's', 't', 'e', '\0'};
+
+	utilizadores = lerUtilizadores();
+	login(utilizadores, &utilizadorAtual, &nomeAtual, &gestor);
+
+	printf("\nNome : %s\n\n", nomeAtual);
+
+	//listarUtilizador(utilizadores);
+
+
+
+	/*int utilizadorAtual = 0;
+	int checkGestor = login(utilizadorAtual);
+	menu(checkGestor, utilizadorAtual);*/
+}
+
+int menu(int checkGestor, int utilizadorAtual) {
+	switch (checkGestor)
+	{
+	case 1:
+		printf("\n\nOperação específica\n\n");
+	default:
+		printf("\n\nOperação geral\n\n");
+		break;
+	}
+	
+	printf("\n\nUtilizador: %d\n\n", utilizadorAtual);
+
+	return 0;
 }
