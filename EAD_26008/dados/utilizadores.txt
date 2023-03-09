@@ -1,3 +1,4 @@
 1;admin@admin;Administrador;123;0;1990-1-1;987654321;Rua de Cima;1
 2;admin2@admin;Administrador2;123;0;1990-1-1;987654321;Rua de Cima;1
 3;j@cliente;JCliente;1ab;0;2001-07-11;789654123;Rua de Baixo;0
+3;1;Cliente Testes;1;0;2001-07-11;789654123;Rua de Baixo;0

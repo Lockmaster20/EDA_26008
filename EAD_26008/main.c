@@ -56,7 +56,7 @@ typedef struct registoAluguer {
 
 
 
-Utilizador* inserirUtilizador(Utilizador* inicio, int codigo, char utilizador[], char nome[], char password[], float saldo, Data dataNascimento, int NIF, char morada[], int gestor) {
+Utilizador* carregarUtilizador(Utilizador* inicio, int codigo, char utilizador[], char nome[], char password[], float saldo, Data dataNascimento, int NIF, char morada[], int gestor) {
 	int i0 = 0;
 	int a = dataNascimento.ano;
 	int i1 = 1; 
@@ -107,13 +107,50 @@ Utilizador* lerUtilizadores()
 				return NULL;
 			}
 			else {
-				aux = inserirUtilizador(aux, fcodigo, futilizador, fnome, fpassword, fsaldo, fdataNascimento, fNIF, fmorada, fgestor);
+				aux = carregarUtilizador(aux, fcodigo, futilizador, fnome, fpassword, fsaldo, fdataNascimento, fNIF, fmorada, fgestor);
 			}
 		}
 		fclose(fp);
 	}
 	return(aux);
 }
+
+#pragma region FreeRegion
+
+void freeUtilizador(Utilizador* inicio) {
+	Utilizador* aux;
+
+	while (inicio != NULL)
+	{
+		aux = inicio;
+		inicio = inicio->seguinte;
+		free(aux);
+	}
+}
+
+void freeMeio(Meio* inicio) {
+	Meio* aux;
+
+	while (inicio != NULL)
+	{
+		aux = inicio;
+		inicio = inicio->seguinte;
+		free(aux);
+	}
+}
+
+void freeAluguer(Aluguer* inicio) {
+	Aluguer* aux;
+
+	while (inicio != NULL)
+	{
+		aux = inicio;
+		inicio = inicio->seguinte;
+		free(aux);
+	}
+}
+
+#pragma endregion
 
 void listarUtilizador(Utilizador* inicio)
 {
@@ -126,8 +163,9 @@ void listarUtilizador(Utilizador* inicio)
 }
 
 
-int login(Utilizador* inicio, int *utilizadorAtual, char *nomeAtual, int* gestor) {
-
+int login(Utilizador* inicio, int *utilizadorAtual, int* gestor, char* nomeAtual) {
+	
+	Utilizador* aux;
 	int sucesso=0;
 	char utilizador[20], password[4];
 
@@ -140,66 +178,121 @@ int login(Utilizador* inicio, int *utilizadorAtual, char *nomeAtual, int* gestor
 		scanf("%3s", password);			// !!! A ler os primeiros 3 caracteres da passe introduzida alterar na versão final !!!
 		scanf("%*c");
 
-		while (inicio != NULL)
+		aux = inicio;
+		while (aux != NULL)
 		{
 			int a = 0;
-			if (!strcmp(utilizador, inicio->utilizador) && !strcmp(password, inicio->password))
+			if (!strcmp(utilizador, aux->utilizador) && !strcmp(password, aux->password))
 			{
-				*gestor = inicio->gestor;
-				*utilizadorAtual = inicio->codigo;
+				*utilizadorAtual = aux->codigo;
+				*gestor = aux->gestor;
+				strcpy(nomeAtual, aux->nome);
 
-				strcpy(nomeAtual, inicio->nome);
 				sucesso = 1;
+				aux = NULL;
 			}
-			inicio = inicio->seguinte;
+			else {
+				aux = aux->seguinte;
+			}
 		}
 		system("cls");
 		if (sucesso == 0)
 			printf("\n------ERRO------\n\n");
 	}
 
-	printf("\n------LOGIN------\n\n");
-
 	return 1;
 }
 
-main() {
-	//Fazer com listas ligadas porque ocupam menos espaço na memória, porque não é necessário dedicar memória ao definir a sruct
-	//cada "meio" regista o endereço do próximo "meio"
+int menuGestor(int utilizadorAtual, char* nomeAtual) {
 
-	//Carregar utilizadores
-	//Fazer login
-	//Carregar
+	Utilizador* utilizadores = NULL;
+	int opcao, sucesso = 0;
 
-	Utilizador* utilizadores = NULL;			// Lista ligada vazia 
-	int utilizadorAtual = 0, gestor = 0;		//Dados da sessão
-	char nomeAtual[50] = {'t', 'e', 's', 't', 'e', '\0'};
+	while (sucesso != 1) {
+		system("cls");
+		printf(" %s -- Menu de Gestor:\n\n", nomeAtual);
+		printf("1. Alterar Dados Pessoais\n\n --- Meios\n2. Listar Meios\n3. Editar Meio\n4. Apagar Meio\n\n --- Utilizadores\n5. Listar Utilizadores\n6. Adicionar Utilizador\n7. Editar Utilizador\n8. Apagar Utilizador\n\n --- Alugueres\n9. Listar Alugueres\n\n10. Sair\n\n-> ");
 
-	utilizadores = lerUtilizadores();
-	login(utilizadores, &utilizadorAtual, &nomeAtual, &gestor);
+		scanf("%d", &opcao);
+		scanf("%*c");
+		switch (opcao)
+		{
+		case 1:
+			printf("\n\nOperação específica\n\n");
+			break;
+		case 2:
+			printf("\n\nOperação específica\n\n");
+			break;
+		case 3:
+			printf("\n\nOperação específica\n\n");
+			break;
+		case 4:
+			printf("\n\nOperação específica\n\n");
+			break;
+		case 5:
+			utilizadores = lerUtilizadores();
+			listarUtilizador(utilizadores);
+			sucesso = 1;
+			break;
+		case 6:
+			printf("\n\nOperação específica\n\n");
+			break;
+		case 7:
+			printf("\n\nOperação específica\n\n");
+			break;
+		case 8:
+			printf("\n\nOperação específica\n\n");
+			break;
+		case 9:
+			printf("\n\nOperação específica\n\n");
+			break;
+		case 10:
+			sucesso = 1;
+			break;
+		}
+	}
 
-	printf("\nNome : %s\n\n", nomeAtual);
 
-	//listarUtilizador(utilizadores);
-
-
-
-	/*int utilizadorAtual = 0;
-	int checkGestor = login(utilizadorAtual);
-	menu(checkGestor, utilizadorAtual);*/
+	return 0;
 }
 
-int menu(int checkGestor, int utilizadorAtual) {
-	switch (checkGestor)
+int menu(int utilizadorAtual, char* nomeAtual) {
+
+	printf(" %s -- Menu:\n\n", nomeAtual);
+	printf("1. Alterar Dados Pessoais\n2. Listar Meios Disponiveis\n3. Alugar Meio\n\n0. Sair");
+	//scanf();
+
+	/*switch (utilizadorAtual)
 	{
 	case 1:
 		printf("\n\nOperação específica\n\n");
 	default:
 		printf("\n\nOperação geral\n\n");
 		break;
-	}
-	
-	printf("\n\nUtilizador: %d\n\n", utilizadorAtual);
+	}*/
 
 	return 0;
+}
+
+main() {
+
+	Utilizador* utilizadores = NULL, *aux;			// Lista ligada vazia 
+	int utilizadorAtual = 0, gestor = 0;		//Dados da sessão
+	char nomeAtual[50];
+
+	utilizadores = lerUtilizadores();
+	//login(utilizadores, &utilizadorAtual, &nomeAtual, &gestor);
+	login(utilizadores, &utilizadorAtual, &gestor, &nomeAtual);
+	freeUtilizador(utilizadores);
+
+	if (utilizadorAtual) {
+		if (gestor == 1) {
+			menuGestor(utilizadorAtual, nomeAtual);
+		}
+		else {
+			menu(utilizadorAtual, nomeAtual);
+		}
+	}
+
+	//listarUtilizador(utilizadores);
 }
