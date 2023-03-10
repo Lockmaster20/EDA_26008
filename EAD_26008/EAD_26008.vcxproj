@@ -130,6 +130,8 @@
     <ClCompile Include="main.c" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="dados\alugueres.txt" />
+    <Text Include="dados\meios.txt" />
     <Text Include="dados\utilizadores.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

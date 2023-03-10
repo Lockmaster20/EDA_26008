@@ -21,5 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="dados\utilizadores.txt" />
+    <Text Include="dados\meios.txt" />
+    <Text Include="dados\alugueres.txt" />
   </ItemGroup>
 </Project>
