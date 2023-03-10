@@ -372,6 +372,36 @@ void listarAluguer(Aluguer* inicio, Utilizador* utilizadores, Meio* meios, int u
 
 #pragma endregion
 
+Meio* removerMeioAtivo(Meio* inicio, Aluguer* alugueres)
+{
+	Meio* aux = NULL;
+	Aluguer* auxAlugueres = alugueres;
+	int ativo;
+	while (inicio != NULL)
+	{
+		alugueres = auxAlugueres;
+		ativo = 0;
+
+		// Verificar se o meio tem algum aluguer ativo
+		while (alugueres != NULL)
+		{
+			if ((inicio->codigo == alugueres->codigoMeio) && (alugueres->ativo == 1)) {
+				ativo = 1;
+			}
+			alugueres = alugueres->seguinte;
+		}
+
+		// Se o meio não tiver um aluguer ativo adiciona à lista para devolver
+		if (ativo == 0) {
+			aux = carregarMeio(aux, inicio->codigo, inicio->tipo, inicio->estado, inicio->preco, inicio->historico);
+		}
+
+		inicio = inicio->seguinte;
+	}
+	freeAluguer(auxAlugueres);
+	return (aux);
+}
+
 void login(Utilizador* inicio, int *utilizadorAtual, int* gestor, char* nomeAtual) {
 	
 	Utilizador* aux;
@@ -511,10 +541,15 @@ int menu(int utilizadorAtual, char* nomeAtual) {
 			printf("\n\nOperação específica\n\n");
 			break;
 		case 2:
-			meios = lerMeios();
-			listarMeio(meios, 1);
+			alugueres = lerAlugueres();
+			meios = removerMeioAtivo(lerMeios(), alugueres);
+			listarMeio(meios, 0);
+
 			freeMeio(meios);
+			freeAluguer(alugueres);
 			meios = NULL;
+			alugueres = NULL;
+
 			sucesso = 1;
 			break;
 		case 4:
@@ -567,9 +602,11 @@ main() {
 	//listarUtilizador(utilizadores);
 
 	Meio* meios = NULL;
-	meios = lerMeios();
 	Aluguer* alugueres = NULL;
 	alugueres = lerAlugueres();
-	listarAluguer(alugueres, utilizadores, meios, utilizadorAtual, gestor);
+	meios = removerMeioAtivo(lerMeios(), alugueres);
+	listarMeio(meios, 0);
+
+	//listarAluguer(alugueres, utilizadores, meios, utilizadorAtual, gestor);
 	//int aaaa = 0;
 }
