@@ -58,11 +58,34 @@ typedef struct registoAluguer {
 
 #pragma endregion
 
+#pragma region lerDocumentos
+
+Utilizador* lerUtilizadores();
+
+Meio* lerMeios();
+
+Aluguer* lerAlugueres();
+
+#pragma endregion
+
+#pragma region existeDados
+
 int existeUtilizador(Utilizador* inicio, int codigo);
 int existeUser(Utilizador* inicio, char* utilizador);
 int existeMeio(Meio* inicio, int codigo);
 int existeAluguer(Aluguer* inicio, int codigo);
 int existeAluguerMeio(Aluguer* inicio, int codigo);
+int existeAluguerAtivo(Aluguer* inicio, int codigo);
+
+#pragma endregion
+
+#pragma region obterUltimoCodigo
+
+int obterUltimoUtilizador(Utilizador* inicio);
+int obterUltimoMeio(Meio* inicio);
+int obterUltimoAluguer(Aluguer* inicio);
+
+#pragma endregion
 
 #pragma region menus
 
@@ -72,7 +95,7 @@ int mG1();
 
 int mG2(Meio* meios);
 
-int mG3();
+int mG3(Meio* meios, int codigo, char* tipo, Estado estado, float preco);
 
 int mG4();
 
@@ -98,12 +121,10 @@ int m1();
 
 int m2(Aluguer* alugueres, Meio* meios);
 
-int m3();
+int m3(Utilizador* utilizadores, Aluguer* alugueres, int codigo, int codigoUtilizador, int codigoMeio, float custo);
 
 int m4(Utilizador* utilizadores, Aluguer* alugueres, Meio* meios, int utilizadorAtual);
 
 #pragma endregion
 
 #pragma endregion
-
-Utilizador* lerUtilizadores();

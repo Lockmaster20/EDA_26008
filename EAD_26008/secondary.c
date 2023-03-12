@@ -365,6 +365,23 @@ void apagarMeio(Meio* inicio, int meioApagar)
 
 		inicio = inicio->seguinte;
 	}
+	return;
+}
+
+int atualizarSaldo(Utilizador* inicio, int codigo, float custo) {
+
+	while (inicio != NULL)
+	{
+		if ((inicio->codigo == codigo) && (inicio->saldo < custo)) {
+			return (0);
+		}
+		else if ((inicio->codigo == codigo))
+		{
+			inicio->saldo = (inicio->saldo - custo);
+			return (1);
+		}
+		inicio = inicio->seguinte;
+	}
 	return (1);
 }
 
@@ -419,7 +436,7 @@ int adicionarAlugueres(Aluguer* inicio)
 		while (inicio != NULL)
 		{
 			fprintf(fp, "%d;%d;%d;%d;%.2f\n",
-				inicio->codigo, inicio->codigoUtilizador, inicio->codigoUtilizador, inicio->ativo, inicio->custo);
+				inicio->codigo, inicio->codigoUtilizador, inicio->codigoMeio, inicio->ativo, inicio->custo);
 			inicio = inicio->seguinte;
 		}
 		fclose(fp);
@@ -542,6 +559,54 @@ int existeAluguerMeio(Aluguer* inicio, int codigo)
 	return(0);
 }
 
+int existeAluguerAtivo(Aluguer* inicio, int codigo)
+{
+	while (inicio != NULL)
+	{
+		if ((inicio->codigoUtilizador == codigo) && (inicio->ativo == 1)) return(1);
+		inicio = inicio->seguinte;
+	}
+	return(0);
+}
+
+#pragma endregion
+
+#pragma region obterUltimoCodigo
+
+
+int obterUltimoUtilizador(Utilizador* inicio) {
+	int i = 0;
+	while (inicio != NULL) {
+		if (i < inicio->codigo) {
+			i = inicio->codigo;
+		}
+		inicio = inicio->seguinte;
+	}
+	return (i);
+}
+
+int obterUltimoMeio(Meio* inicio) {
+	int i = 0;
+	while (inicio != NULL) {
+		if (i < inicio->codigo) {
+			i = inicio->codigo;
+		}
+		inicio = inicio->seguinte;
+	}
+	return (i);
+}
+
+int obterUltimoAluguer(Aluguer* inicio) {
+	int i = 0;
+	while (inicio != NULL) {
+		if (i < inicio->codigo) {
+			i = inicio->codigo;
+		}
+		inicio = inicio->seguinte;
+	}
+	return (i);
+}
+
 #pragma endregion
 
 #pragma region menus
@@ -562,8 +627,13 @@ int mG2(Meio* meios) {
 	return 1;
 }
 
-int mG3() {
-	printf("\n\nOperação especifica\n\n");
+int mG3(Meio* meios, int codigo, char* tipo, Estado estado, float preco) {
+	meios = carregarMeio(meios, codigo, tipo, estado, preco, 0);
+
+	adicionarMeios(meios);
+
+	free(meios);
+	meios = NULL;
 	return 1;
 }
 
@@ -667,8 +737,22 @@ int m2(Aluguer* alugueres, Meio* meios) {
 	return 1;
 }
 
-int m3() {
-	printf("\n\nOperação geral\n\n");
+int m3(Utilizador* utilizadores, Aluguer* alugueres, int codigo, int codigoUtilizador, int codigoMeio, float custo) {
+
+	// !!! Verificar se o saldo permite o aluguer e remover o custo do saldo.
+	utilizadores = lerUtilizadores();
+	if (atualizarSaldo(utilizadores, codigoUtilizador, custo)){
+
+		guardarUtilizadores(utilizadores);
+
+		alugueres = carregarAluguer(alugueres, codigo, codigoUtilizador, codigoMeio, 1, custo);
+		adicionarAlugueres(alugueres);
+
+		free(alugueres);
+		alugueres = NULL;
+	}
+	free(utilizadores);
+	utilizadores = NULL;
 	return 1;
 }
 

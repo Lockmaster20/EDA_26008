@@ -55,9 +55,10 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 	//Dados scanf adicionar/alterar
 
 	int codigo, NIF, gestor, historico;
-	char utilizador[11], nome[41], password[11], morada[31];
-	float saldo;
+	char utilizador[11], nome[41], password[11], morada[31], tipo[21];
+	float saldo, preco;
 	Data dataNascimento;
+	Estado estado;
 
 	while (sucesso != 1) {
 		system("cls");
@@ -79,7 +80,45 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 			sucesso = 1;
 			break;
 		case 3:
-			mG3();
+			/*existe = 1;
+			while (existe)
+			{
+				printf("Codigo:\n");
+				scanf("%d", &codigo);
+				getchar();
+
+				meios = lerMeios();
+				existe = existeMeio(meios, codigo);
+
+				free(meios);
+				meios = NULL;
+			}*/
+			meios = lerMeios();
+			codigo = obterUltimoMeio(meios) + 1;
+			free(meios);
+			meios = NULL;
+
+			printf("Tipo:\n");
+			scanf("%[^\n]20s", tipo);
+			getchar();
+
+			printf("Bateria:\n");
+			scanf("%f", &estado.bateria);
+			getchar();
+
+			printf("Autonomia:\n");
+			scanf("%f", &estado.autonomia);
+			getchar();
+
+			printf("Localizacao: (palavra1.palavra2.palavra3)\n");
+			scanf("%[^\n]56s", &estado.posicao.palavras);
+			getchar();
+
+			printf("Preco:\n");
+			scanf("%f", &preco);
+			getchar();
+			
+			mG3(meios, codigo, tipo, estado, preco);
 			break;
 		case 4:
 			mG4();
@@ -94,7 +133,7 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 			sucesso = 1;
 			break;
 		case 7:
-			existe = 1;
+			/*existe = 1;
 			while (existe)
 			{
 				printf("Codigo:\n");
@@ -106,7 +145,12 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 
 				free(utilizadores);
 				utilizadores = NULL;
-			}
+			}*/
+			utilizadores = lerUtilizadores();
+			codigo = obterUltimoUtilizador(utilizadores) + 1;
+			free(utilizadores);
+			utilizadores = NULL;
+
 			existe = 1;
 			while (existe)
 			{
@@ -175,7 +219,8 @@ int menu(int utilizadorAtual, char* nomeAtual) {
 	Utilizador* utilizadores = NULL;
 	Meio* meios = NULL;
 	Aluguer* alugueres = NULL;
-	int opcao, sucesso = 0;
+	int opcao, sucesso = 0, existe, codigo, codigoMeio;
+	float custo;
 
 	while (sucesso != 1) {
 		system("cls");
@@ -197,7 +242,42 @@ int menu(int utilizadorAtual, char* nomeAtual) {
 			sucesso = 1;
 			break;
 		case 3:
-			m3();
+			alugueres = lerAlugueres();
+			existe = existeAluguerAtivo(alugueres, utilizadorAtual);
+
+			free(alugueres);
+			alugueres = NULL;
+
+			if (!existe) {
+				alugueres = lerAlugueres();
+				codigo = obterUltimoAluguer(alugueres) + 1;
+				free(alugueres);
+				alugueres = NULL;
+
+				existe = 1;
+				while (existe)
+				{
+					printf("Codigo do Meio:\n");
+					scanf("%d", &codigoMeio);
+					getchar();
+
+					meios = lerMeios();
+					alugueres = lerAlugueres();
+					existe = (existeMeio(meios, codigo) && existeAluguerMeio(alugueres, codigo));
+
+					free(meios);
+					meios = NULL;
+					free(alugueres);
+					alugueres = NULL;
+				}
+
+				// !!! Opção temporária, depois calcular o custo pelo preço do meio
+				printf("Custo:\n");
+				scanf("%f", &custo);
+				getchar();
+
+				m3(utilizadores, alugueres, codigo, utilizadorAtual, codigoMeio, custo);
+			}
 			break;
 		case 4:
 			m4(utilizadores, alugueres, meios, utilizadorAtual);
