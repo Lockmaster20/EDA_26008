@@ -2,420 +2,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "secondary.h"
 
-typedef struct registoData {
-	int ano, mes, dia;
-} Data;
+void login(Utilizador* inicio, int* utilizadorAtual, int* gestor, char* nomeAtual) {
 
-typedef struct registoPosicao {
-	char palavras[57];
-} Posicao;
-
-typedef struct registoContacto {
-	char tipoContacto[10];
-	char contacto[30];
-} Contacto;
-
-typedef struct registoEstado {
-	float bateria;
-	float autonomia;
-	Posicao posicao;				// posição do meio através de 3 palavras (what3words.com)
-} Estado;
-
-typedef struct registoMeio {
-	int codigo;
-	char tipo[21];
-	Estado estado;
-	float preco;					// preco por minuto
-	int historico;
-	struct registoMeio* seguinte;	// endereço de memória para uma struct
-} Meio;
-
-typedef struct registoUtilizador {
-	int codigo;
-	char utilizador[11];			// Nome para iniciar sessão
-	char nome[41];					// Nome normal
-	char password[11];				// Ex: "12ab567890" + \n
-	float saldo;
-	Data dataNascimento;
-	int NIF;
-	char morada[31];
-	//Contacto contacto[3];			// máximo de 3 contactos por cliente
-	int gestor;
-	int historico;					// verifica se foi "eliminado"
-	struct registoUtilizador* seguinte;
-} Utilizador;
-
-typedef struct registoAluguer {
-	int codigo;
-	int codigoUtilizador;
-	int codigoMeio;
-	//Data dataInicio, dataFim;
-	//Estado estadoInicial, estadoFinal;
-	int ativo;
-	float custo;					// preço total do aluguer
-	struct registoAluguer* seguinte;
-} Aluguer;
-
-const char* checkSN(int i) {
-
-	switch (i)
-	{
-	case 1:
-		return "Sim";
-	case 0:
-		return "Nao";
-	}
-}
-
-#pragma region libertarMemoria
-
-void freeUtilizador(Utilizador* inicio) {
 	Utilizador* aux;
-
-	while (inicio != NULL)
-	{
-		aux = inicio;
-		inicio = inicio->seguinte;
-		free(aux);
-	}
-	inicio = NULL;
-}
-
-void freeMeio(Meio* inicio) {
-	Meio* aux;
-
-	while (inicio != NULL)
-	{
-		aux = inicio;
-		inicio = inicio->seguinte;
-		free(aux);
-	}
-}
-
-void freeAluguer(Aluguer* inicio) {
-	Aluguer* aux;
-
-	while (inicio != NULL)
-	{
-		aux = inicio;
-		inicio = inicio->seguinte;
-		free(aux);
-	}
-}
-
-#pragma endregion
-
-#pragma region carregarDados
-
-Utilizador* carregarUtilizador(Utilizador* inicio, int codigo, char utilizador[], char nome[], char password[], float saldo, Data dataNascimento, int NIF, char morada[], int gestor, int historico) {
-	
-	Utilizador* novo = malloc(sizeof(struct registoUtilizador));
-
-	if (novo != NULL)
-	{
-		novo->codigo = codigo;
-		strcpy(novo->utilizador, utilizador);
-		strcpy(novo->nome, nome);
-		strcpy(novo->password, password);
-		novo->saldo = saldo;
-		novo->dataNascimento.ano = dataNascimento.ano;
-		novo->dataNascimento.mes = dataNascimento.mes;
-		novo->dataNascimento.dia = dataNascimento.dia;
-		novo->NIF = NIF;
-		strcpy(novo->morada, morada);
-		novo->gestor = gestor;
-		novo->historico = historico;
-
-		novo->seguinte = inicio;
-		return(novo);
-	}
-}
-
-Meio* carregarMeio(Meio* inicio, int codigo, char tipo[], Estado estado, float preco, int historico) {
-
-	Meio* novo = malloc(sizeof(struct registoMeio));
-
-	if (novo != NULL)
-	{
-		novo->codigo = codigo;
-		strcpy(novo->tipo, tipo);
-		novo->estado.bateria = estado.bateria;
-		novo->estado.autonomia = estado.autonomia;
-		strcpy(novo->estado.posicao.palavras, estado.posicao.palavras);
-		novo->preco = preco;
-		novo->historico = historico;
-
-		novo->seguinte = inicio;
-		return(novo);
-	}
-}
-
-Aluguer* carregarAluguer(Aluguer* inicio, int codigo, int codigoUtilizador, int codigoMeio, int ativo, float custo) {
-
-	Aluguer* novo = malloc(sizeof(struct registoAluguer));
-
-	if (novo != NULL)
-	{
-		novo->codigo = codigo;
-		novo->codigoUtilizador = codigoUtilizador;
-		novo->codigoMeio = codigoMeio;
-		novo->ativo = ativo;
-		novo->custo = custo;
-
-		novo->seguinte = inicio;
-		return(novo);
-	}
-}
-
-#pragma endregion
-
-#pragma region lerDocumentos
-
-Utilizador* lerUtilizadores()
-{
-	FILE* fp;
-
-	int codigo, NIF, gestor, historico;
-	char utilizador[11], nome[41], password[11], morada[31];
-	float saldo;
-	Data dataNascimento;
-
-	Utilizador* aux = NULL;
-
-	fp = fopen("dados/utilizadores.txt", "r");
-	if (fp != NULL)
-	{
-		while (!feof(fp))
-		{
-			int check = fscanf(fp, "%d;%[^;];%[^;];%[^;];%f;%d-%d-%d;%d;%[^;];%d;%d\n", &codigo, utilizador, nome, password, &saldo, &dataNascimento.ano, &dataNascimento.mes, &dataNascimento.dia, &NIF, morada, &gestor, &historico);
-			if (check != 12) {
-				printf("\n\n\nErro a carregar dados dos utilizadores\n\n\n");
-				return NULL;
-			}
-			else {
-				aux = carregarUtilizador(aux, codigo, utilizador, nome, password, saldo, dataNascimento, NIF, morada, gestor, historico);
-			}
-		}
-		fclose(fp);
-	}
-	return(aux);
-}
-
-Meio* lerMeios()
-{
-	FILE* fp;
-
-	int codigo, historico;
-	char tipo[21];
-	float preco;
-	Estado estado;
-
-	Meio* aux = NULL;
-
-	fp = fopen("dados/meios.txt", "r");
-	if (fp != NULL)
-	{
-		while (!feof(fp))
-		{
-			int check = fscanf(fp, "%d;%[^;];%f;%f;%[^;];%f;%d\n", 
-				&codigo, tipo, &estado.bateria, &estado.autonomia, 
-				&estado.posicao.palavras, 
-				&preco, &historico);
-			
-			if (check != 7) {
-				printf("\n\n\nErro a carregar dados dos meios\n\n\n");
-				return NULL;
-			}
-			else {
-				aux = carregarMeio(aux, codigo, tipo, estado, preco, historico);
-			}
-		}
-		fclose(fp);
-	}
-	return(aux);
-}
-
-Aluguer* lerAlugueres()
-{
-	FILE* fp;
-
-	int codigo, codigoUtilizador, codigoMeio, ativo;
-	float custo;
-
-	Aluguer* aux = NULL;
-
-	fp = fopen("dados/alugueres.txt", "r");
-	if (fp != NULL)
-	{
-		while (!feof(fp))
-		{
-			int check = fscanf(fp, "%d;%d;%d;%d;%f\n",
-				&codigo, &codigoUtilizador, &codigoMeio, &ativo, &custo);
-
-			if (check != 5) {
-				printf("\n\n\nErro a carregar dados dos alugueres\n\n\n");
-				return NULL;
-			}
-			else {
-				aux = carregarAluguer(aux, codigo, codigoUtilizador, codigoMeio, ativo, custo);
-			}
-		}
-		fclose(fp);
-	}
-	return(aux);
-}
-
-#pragma endregion
-
-#pragma region listarDados
-
-void listarUtilizador(Utilizador* inicio)
-{
-	printf("==================================================================================================================================================\n");
-	printf("Codigo | Utilizador | Nome                                     | Morada                         | Data Nasc. | NIF       | Saldo  | Gestor | Hist.\n");
-	printf("=======|============|==========================================|================================|============|===========|========|========|======\n");
-
-	while (inicio != NULL)
-	{
-		printf("%6d | %-10s | %-40s | %-30s | %2d-%2d-%4d | %9d | %6.2f | %-6s | %-5s\n", 
-			inicio->codigo, inicio->utilizador, inicio->nome, inicio->morada, 
-			inicio->dataNascimento.dia, inicio->dataNascimento.mes, inicio->dataNascimento.ano, 
-			inicio->NIF, inicio->saldo, checkSN(inicio->gestor), checkSN(inicio->historico));
-		inicio = inicio->seguinte;
-	}
-	printf("==================================================================================================================================================\n");
-}
-
-void listarMeio(Meio* inicio, int gestor)
-{
-	if (gestor == 1) {
-		printf("==============================================================================================================================\n");
-		printf("Codigo | Tipo                 | Bateria | Autonomia | Localizacao                                              | Preco | Hist.\n");
-		printf("=======|======================|=========|===========|==========================================================|=======|======\n");
-
-		while (inicio != NULL)
-		{
-			printf("%6d | %-20s | %7.2f | %9.2f | %-56s | %5.2f | %-5s\n",
-				inicio->codigo, inicio->tipo, inicio->estado.bateria, inicio->estado.bateria,
-				inicio->estado.posicao.palavras,
-				inicio->preco, checkSN(inicio->historico));
-			inicio = inicio->seguinte;
-		}
-		printf("==============================================================================================================================\n");
-	}
-	else {
-		printf("======================================================================================================================\n");
-		printf("Codigo | Tipo                 | Bateria | Autonomia | Localizacao                                              | Preco\n");
-		printf("=======|======================|=========|===========|==========================================================|======\n");
-
-		while (inicio != NULL)
-		{
-			if (inicio->historico == 0) {
-				printf("%6d | %-20s | %7.2f | %9.2f | %-56s | %5.2f\n",
-					inicio->codigo, inicio->tipo, inicio->estado.bateria, inicio->estado.bateria,
-					inicio->estado.posicao.palavras,
-					inicio->preco);
-			}
-			inicio = inicio->seguinte;
-		}
-		printf("======================================================================================================================\n");
-
-	}
-}
-
-void listarAluguer(Aluguer* inicio, Utilizador* utilizadores, Meio* meios, int utilizadorAtual, int gestor)
-{
-	char utilizador[11], tipo[21];
-
-	printf("=============================================================================\n");
-	printf("Codigo | Utilizador | C. Ut. | Tipo de Meio         | C. Me. | Ativo | Custo \n");
-	printf("=======|============|========|======================|========|=======|=======\n");
-
-	while (inicio != NULL)
-	{
-		while (utilizadores != NULL){
-				if (inicio->codigoUtilizador == utilizadores->codigo) {
-					strcpy(utilizador, utilizadores->utilizador);
-					utilizadores = NULL;
-				}
-				else {
-					utilizadores = utilizadores->seguinte;
-				}
-			}
-		while (meios != NULL){
-				if (inicio->codigoMeio == meios->codigo) {
-					strcpy(tipo, meios->tipo);
-					meios = NULL;
-				}
-				else {
-					meios = meios->seguinte;
-				}
-			}
-
-		if (gestor == 1) {
-			printf("%6d | %-10s | %6d | %-20s | %6d | %5s | %6.2f\n",
-				inicio->codigo, utilizador, inicio->codigoUtilizador, tipo, inicio->codigoMeio,
-				checkSN(inicio->ativo), inicio->custo);
-		}
-		else {
-			if (inicio->codigoUtilizador == utilizadorAtual) {
-				printf("%6d | %-10s | %6d | %-20s | %6d | %5s | %6.2f\n",
-					inicio->codigo, utilizador, inicio->codigoUtilizador, tipo, inicio->codigoMeio,
-					checkSN(inicio->ativo), inicio->custo);
-			}
-		}
-		inicio = inicio->seguinte;
-	}
-	printf("=============================================================================\n");
-}
-
-#pragma endregion
-
-Meio* removerMeioAtivo(Meio* inicio, Aluguer* alugueres)
-{
-	Meio* aux = NULL;
-	Aluguer* auxAlugueres = alugueres;
-	int ativo;
-	while (inicio != NULL)
-	{
-		alugueres = auxAlugueres;
-		ativo = 0;
-
-		// Verificar se o meio tem algum aluguer ativo
-		while (alugueres != NULL)
-		{
-			if ((inicio->codigo == alugueres->codigoMeio) && (alugueres->ativo == 1)) {
-				ativo = 1;
-			}
-			alugueres = alugueres->seguinte;
-		}
-
-		// Se o meio não tiver um aluguer ativo adiciona à lista para devolver
-		if (ativo == 0) {
-			aux = carregarMeio(aux, inicio->codigo, inicio->tipo, inicio->estado, inicio->preco, inicio->historico);
-		}
-
-		inicio = inicio->seguinte;
-	}
-	freeAluguer(auxAlugueres);
-	return (aux);
-}
-
-void login(Utilizador* inicio, int *utilizadorAtual, int* gestor, char* nomeAtual) {
-	
-	Utilizador* aux;
-	int sucesso=0;
+	int sucesso = 0;
 	char utilizador[16], password[11];
 
-	while(!sucesso){
+	while (!sucesso) {
 
 		printf("Utilizador:\n");
 		scanf("%15s", utilizador);
-		scanf("%*c");					// !!! Se possível ver outra solução para não passar à frente !!!
+		getchar();
 		printf("Password:\n");
-		scanf("%10s", password);			// !!! A ler os primeiros 3 caracteres da passe introduzida alterar na versão final !!!
-		scanf("%*c");
+		scanf("%10s", password);
+		getchar();
 
 		aux = inicio;
 		while (aux != NULL)
@@ -441,12 +43,21 @@ void login(Utilizador* inicio, int *utilizadorAtual, int* gestor, char* nomeAtua
 	return;
 }
 
+#pragma region menus
+
 int menuGestor(int utilizadorAtual, char* nomeAtual) {
 
 	Utilizador* utilizadores = NULL;
 	Meio* meios = NULL;
 	Aluguer* alugueres = NULL;
-	int opcao, sucesso = 0;
+	int opcao, sucesso = 0, existe;
+
+	//Dados scanf adicionar/alterar
+
+	int codigo, NIF, gestor, historico;
+	char utilizador[11], nome[41], password[11], morada[31];
+	float saldo;
+	Data dataNascimento;
 
 	while (sucesso != 1) {
 		system("cls");
@@ -454,64 +65,105 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 		printf("1. Alterar Dados Pessoais\n\n --- Meios\n2. Listar Meios\n3. Adicionar Meio\n4. Editar Meio\n5. Apagar Meio\n\n --- Utilizadores\n6. Listar Utilizadores\n7. Adicionar Utilizador\n8. Editar Utilizador\n9. Apagar Utilizador\n\n --- Alugueres\n10. Listar Alugueres\n11. Editar Aluguer\n\n0. Sair\n\n-> ");
 
 		scanf("%d", &opcao);
-		scanf("%*c");
+		getchar();
 		switch (opcao)
 		{
 		case 0:
 			sucesso = 1;
 			break;
 		case 1:
-			printf("\n\nOperação específica\n\n");
+			mG1();
 			break;
 		case 2:
-			meios = lerMeios();
-			listarMeio(meios, 1);
-			freeMeio(meios);
-			meios = NULL;
+			mG2(meios);
 			sucesso = 1;
 			break;
 		case 3:
-			printf("\n\nOperação específica\n\n");
+			mG3();
 			break;
 		case 4:
-			printf("\n\nOperação específica\n\n");
+			mG4();
 			break;
 		case 5:
-			printf("\n\nOperação específica\n\n");
+			printf("Codigo do meio a remover?\n");
+			scanf("%d", &codigo);
+			mG5(meios, codigo);
 			break;
 		case 6:
-			utilizadores = lerUtilizadores();
-			listarUtilizador(utilizadores);
-			freeUtilizador(utilizadores);
-			utilizadores = NULL;
+			mG6(utilizadores);
 			sucesso = 1;
 			break;
 		case 7:
-			printf("\n\nOperação específica\n\n");
+			existe = 1;
+			while (existe)
+			{
+				printf("Codigo:\n");
+				scanf("%d", &codigo);
+				getchar();
+
+				utilizadores = lerUtilizadores();
+				existe = existeUtilizador(utilizadores, codigo);
+
+				free(utilizadores);
+				utilizadores = NULL;
+			}
+			existe = 1;
+			while (existe)
+			{
+				printf("Utilizador:\n");
+				scanf("%10s", utilizador);
+				getchar();
+
+				utilizadores = lerUtilizadores();
+				existe = existeUser(utilizadores, utilizador);
+
+				free(utilizadores);
+				utilizadores = NULL;
+			}
+			printf("Nome:\n");
+			scanf("%[^\n]40s", nome);
+			getchar();
+
+			printf("Password:\n");
+			scanf("%[^\n]10s", password);
+			getchar();
+
+			printf("Saldo:\n");
+			scanf("%f", &saldo);
+			getchar();
+
+			printf("Data de Nascimento: (d-m-aaaa)\n");
+			scanf("%d-%d-%d", &dataNascimento.dia, &dataNascimento.mes, &dataNascimento.ano);
+			getchar();
+
+			printf("NIF:\n");
+			scanf("%d", &NIF);
+			getchar();
+
+			printf("Morada:\n");
+			scanf("%[^\n]30s", morada);
+			getchar();
+			
+			printf("Gestor: (1 || 0)\n");
+			scanf("%d", &gestor);
+			getchar();
+			mG7(utilizadores, codigo, utilizador, nome, password, saldo, dataNascimento, NIF, morada, gestor);
+			sucesso = 1;
 			break;
 		case 8:
-			printf("\n\nOperação específica\n\n");
+			mG8();
 			break;
 		case 9:
-			printf("\n\nOperação específica\n\n");
+			printf("Codigo do utilizador a remover?\n");
+			scanf("%d", &codigo);
+			mG9(utilizadores, codigo);
 			break;
 		case 10:
-			meios = lerMeios();
-			utilizadores = lerUtilizadores();
-			alugueres = lerAlugueres();
-			listarAluguer(alugueres, utilizadores, meios, utilizadorAtual, 1);
-
-			freeUtilizador(utilizadores);
-			freeMeio(meios);
-			freeAluguer(alugueres);
-			utilizadores = NULL;
-			meios = NULL;
-			alugueres = NULL;
-
+			mG10(utilizadores, alugueres, meios, utilizadorAtual);
 			sucesso = 1;
 			break;
 		case 11:
-			printf("\n\nOperação específica\n\n");
+			mG11();
 			break;
 		}
 	}
@@ -538,33 +190,17 @@ int menu(int utilizadorAtual, char* nomeAtual) {
 			sucesso = 1;
 			break;
 		case 1:
-			printf("\n\nOperação específica\n\n");
+			m1();
 			break;
 		case 2:
-			alugueres = lerAlugueres();
-			meios = removerMeioAtivo(lerMeios(), alugueres);
-			listarMeio(meios, 0);
-
-			freeMeio(meios);
-			freeAluguer(alugueres);
-			meios = NULL;
-			alugueres = NULL;
-
+			m2(alugueres, meios);
 			sucesso = 1;
 			break;
+		case 3:
+			m3();
+			break;
 		case 4:
-			meios = lerMeios();
-			utilizadores = lerUtilizadores();
-			alugueres = lerAlugueres();
-			listarAluguer(alugueres, utilizadores, meios, utilizadorAtual, 1);
-
-			freeUtilizador(utilizadores);
-			freeMeio(meios);
-			freeAluguer(alugueres);
-			utilizadores = NULL;
-			meios = NULL;
-			alugueres = NULL;
-
+			m4(utilizadores, alugueres, meios, utilizadorAtual);
 			sucesso = 1;
 			break;
 		}
@@ -573,16 +209,19 @@ int menu(int utilizadorAtual, char* nomeAtual) {
 	return 0;
 }
 
+#pragma endregion
+
 main() {
 
-	Utilizador* utilizadores = NULL, *aux;			// Lista ligada vazia 
+	Utilizador* utilizadores = NULL, * aux;			// Lista ligada vazia 
 	int utilizadorAtual = 0, gestor = 0;			//Dados da sessão
 	char nomeAtual[41];
 
 	utilizadores = lerUtilizadores();
-	if (utilizadores != NULL && 1 == 0) {
+	if (utilizadores != NULL && 1 == 1) {
 		login(utilizadores, &utilizadorAtual, &gestor, &nomeAtual);
-		freeUtilizador(utilizadores);
+		free(utilizadores);
+		utilizadores = NULL;
 
 		if (utilizadorAtual) {
 			if (gestor == 1) {
@@ -593,20 +232,4 @@ main() {
 			}
 		}
 	}
-
-	//testes
-
-	utilizadorAtual = 5;
-	gestor = 0;
-
-	//listarUtilizador(utilizadores);
-
-	Meio* meios = NULL;
-	Aluguer* alugueres = NULL;
-	alugueres = lerAlugueres();
-	meios = removerMeioAtivo(lerMeios(), alugueres);
-	listarMeio(meios, 0);
-
-	//listarAluguer(alugueres, utilizadores, meios, utilizadorAtual, gestor);
-	//int aaaa = 0;
 }
