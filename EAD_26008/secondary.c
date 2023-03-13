@@ -817,11 +817,11 @@ int mG2(Meio* meios, int opcao, char* posicao) {
 int mG3(Meio* meios, int codigo, char* tipo, Estado estado, float preco) {
 	meios = carregarMeio(meios, codigo, tipo, estado, preco, 0);
 
-	adicionarMeios(meios);
+	int resp = adicionarMeios(meios);
 
 	free(meios);
 	meios = NULL;
-	return 1;
+	return resp;
 }
 
 int mG4() {
@@ -830,16 +830,17 @@ int mG4() {
 }
 
 int mG5(Meio* meios, int codigo) {
+	int resp = 0;
 	meios = lerMeios(meios);
 	if (existeMeio(meios, codigo)) {
 		apagarMeio(meios, codigo);
 		ordenarMeios(meios, 1);
-		guardarMeios(meios);
+		resp = guardarMeios(meios);
 	}
 	free(meios);
 	meios = NULL;
 
-	return 1;
+	return resp;
 }
 
 int mG6(Utilizador* utilizadores) {
@@ -856,11 +857,11 @@ int mG7(Utilizador* utilizadores, int codigo, char* utilizador, char* nome, char
 	
 	utilizadores = carregarUtilizador(utilizadores, codigo, utilizador, nome, password, saldo, dataNascimento, NIF, morada, gestor, 0);
 
-	adicionarUtilizadores(utilizadores);
+	int resp = adicionarUtilizadores(utilizadores);
 
 	free(utilizadores);
 	utilizadores = NULL;
-	return 1;
+	return resp;
 }
 
 int mG8() {
@@ -869,16 +870,17 @@ int mG8() {
 }
 
 int mG9(Utilizador* utilizadores, int codigo) {
+	int resp = 0;
 	utilizadores = lerUtilizadores(utilizadores);
 	if (existeUtilizador(utilizadores, codigo)) {
 		apagarUtilizador(utilizadores, codigo);
 		ordenarUtilizadores(utilizadores);
-		guardarUtilizadores(utilizadores);
+		resp = guardarUtilizadores(utilizadores);
 	}
 	free(utilizadores);
 	utilizadores = NULL;
 
-	return 1;
+	return resp;
 }
 
 int mG10(Utilizador* utilizadores, Aluguer* alugueres, Meio* meios, int utilizadorAtual) {
@@ -942,7 +944,7 @@ int m2(Aluguer* alugueres, Meio* meios, int opcao, char* posicao) {
 }
 
 int m3(Utilizador* utilizadores, Aluguer* alugueres, int codigo, int codigoUtilizador, int codigoMeio, float custo) {
-
+	int resp = 0;
 	// !!! Verificar se o saldo permite o aluguer e remover o custo do saldo.
 	utilizadores = lerUtilizadores();
 	if (atualizarSaldo(utilizadores, codigoUtilizador, custo)){
@@ -951,14 +953,13 @@ int m3(Utilizador* utilizadores, Aluguer* alugueres, int codigo, int codigoUtili
 		guardarUtilizadores(utilizadores);
 
 		alugueres = carregarAluguer(alugueres, codigo, codigoUtilizador, codigoMeio, 1, custo);
-		adicionarAlugueres(alugueres);
-
+		resp = adicionarAlugueres(alugueres);
 		free(alugueres);
 		alugueres = NULL;
 	}
 	free(utilizadores);
 	utilizadores = NULL;
-	return 1;
+	return resp;
 }
 
 int m4(Utilizador* utilizadores, Aluguer* alugueres, Meio* meios, int utilizadorAtual) {
