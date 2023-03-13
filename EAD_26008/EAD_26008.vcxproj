@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.c" />
+    <ClCompile Include="menus.c" />
     <ClCompile Include="secondary.c" />
   </ItemGroup>
   <ItemGroup>

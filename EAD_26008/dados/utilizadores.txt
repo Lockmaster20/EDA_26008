@@ -1,4 +1,4 @@
-20;u123;n123;p123;19.00;2018-12-16;15;m123;0;1
+9;u123;n123;p123;19.00;2018-12-16;15;m123;0;1
 6;g;Nome do Gestor;g;0.00;2001-1-1;999999999;Rua de Teste;1;0
 5;a;Pedro Andre Santos Andrades da Sousa Mar;a;47.57;1978-10-15;123456789;1600 Pennsylvania Avenue NW DC;0;0
 4;1;Cliente Testes;1;0.00;2001-7-11;789654123;Rua de Baixo;0;1
@@ -7,3 +7,4 @@
 1;adm1@admin;Administrador;123;0.00;1990-1-1;987654321;Rua de Cima;1;0
 7;huhuhu;GGG AAA BBB;1234;5.00;2000-12-15;555555555;Rua do Meio, 23;0;0
 8;u123;bino;teste;45.00;2000-12-20;123456987;Rua de Morada;0;0
+10;Hugovski;Hugo Vitorino;555;0.00;1990-1-1;852963741;Pousada da Beira, 7.5;0;0

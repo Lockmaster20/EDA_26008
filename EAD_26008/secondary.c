@@ -53,6 +53,177 @@ void freeAluguer(Aluguer* inicio) {
 */
 #pragma endregion
 
+#pragma region ordenarDados
+
+void trocarUtilizadores(Utilizador* inicio, Utilizador* seg) {
+
+	Utilizador aux;
+
+	aux.codigo = inicio->codigo;
+	strcpy(aux.utilizador, inicio->utilizador);
+	strcpy(aux.nome, inicio->nome);
+	strcpy(aux.password, inicio->password);
+	aux.saldo = inicio->saldo;
+	aux.dataNascimento = inicio->dataNascimento;
+	aux.NIF = inicio->NIF;
+	strcpy(aux.morada, inicio->morada);
+	aux.gestor = inicio->gestor;
+	aux.historico = inicio->historico;
+
+	inicio->codigo = seg->codigo;
+	strcpy(inicio->utilizador, seg->utilizador);
+	strcpy(inicio->nome, seg->nome);
+	strcpy(inicio->password, seg->password);
+	inicio->saldo = seg->saldo;
+	inicio->dataNascimento = seg->dataNascimento;
+	inicio->NIF = seg->NIF;
+	strcpy(inicio->morada, seg->morada);
+	inicio->gestor = seg->gestor;
+	inicio->historico = seg->historico;
+
+	seg->codigo = aux.codigo;
+	strcpy(seg->utilizador, aux.utilizador);
+	strcpy(seg->nome, aux.nome);
+	strcpy(seg->password, aux.password);
+	seg->saldo = aux.saldo;
+	seg->dataNascimento = aux.dataNascimento;
+	seg->NIF = aux.NIF;
+	strcpy(seg->morada, aux.morada);
+	seg->gestor = aux.gestor;
+	seg->historico = aux.historico;
+
+	return;
+}
+
+void ordenarUtilizadores(Utilizador* inicio) {
+	int trocou = 1;
+	Utilizador* aux;
+
+	if (inicio == NULL) return;
+
+	while (trocou) {
+		trocou = 0;
+		aux = inicio;
+
+		while (aux->seguinte != NULL)
+		{
+			if (aux->codigo > aux->seguinte->codigo) {
+				trocarUtilizadores(aux, aux->seguinte);
+				trocou = 1;
+			}
+			aux = aux->seguinte;
+		}
+	}
+	return;
+}
+
+void trocarMeios(Meio* inicio, Meio* seg) {
+
+	Meio aux;
+
+	aux.codigo = inicio->codigo;
+	strcpy(aux.tipo, inicio->tipo);
+	aux.estado = inicio->estado;
+	aux.preco = inicio->preco;
+	aux.historico = inicio->historico;
+
+	inicio->codigo = seg->codigo;
+	strcpy(inicio->tipo, seg->tipo);
+	inicio->estado = seg->estado;
+	inicio->preco = seg->preco;
+	inicio->historico = seg->historico;
+
+	seg->codigo = aux.codigo;
+	strcpy(seg->tipo, aux.tipo);
+	seg->estado = aux.estado;
+	seg->preco = aux.preco;
+	seg->historico = aux.historico;
+
+	return;
+}
+
+void ordenarMeios(Meio* inicio, int opcao) {
+	int trocou = 1;
+	Meio* aux;
+
+	if (inicio == NULL) return;
+
+	while (trocou) {
+		trocou = 0;
+		aux = inicio;
+
+		while (aux->seguinte != NULL)
+		{
+			switch (opcao)
+			{
+			case 1:
+				if (aux->codigo > aux->seguinte->codigo) {
+					trocarMeios(aux, aux->seguinte);
+					trocou = 1;
+				}
+				break;
+			case 2:
+				if (aux->estado.autonomia < aux->seguinte->estado.autonomia) {
+					trocarMeios(aux, aux->seguinte);
+					trocou = 1;
+				}
+				break;
+			}
+			aux = aux->seguinte;
+		}
+	}
+	return;
+}
+
+void trocarAlugueres(Aluguer* inicio, Aluguer* seg) {
+
+	Aluguer aux;
+
+	aux.codigo = inicio->codigo;
+	aux.codigoUtilizador = inicio->codigoUtilizador;
+	aux.codigoMeio = inicio->codigoMeio;
+	aux.ativo = inicio->ativo;
+	aux.custo = inicio->custo;
+
+	inicio->codigo = seg->codigo;
+	inicio->codigoUtilizador = seg->codigoUtilizador;
+	inicio->codigoMeio = seg->codigoMeio;
+	inicio->ativo = seg->ativo;
+	inicio->custo = seg->custo;
+
+	seg->codigo = aux.codigo;
+	seg->codigoUtilizador = aux.codigoUtilizador;
+	seg->codigoMeio = aux.codigoMeio;
+	seg->ativo = aux.ativo;
+	seg->custo = aux.custo;
+
+	return;
+}
+
+void ordenarAlugueres(Aluguer* inicio) {
+	int trocou = 1;
+	Aluguer* aux;
+
+	if (inicio == NULL) return;
+
+	while (trocou) {
+		trocou = 0;
+		aux = inicio;
+
+		while (aux->seguinte != NULL)
+		{
+			if (aux->codigo > aux->seguinte->codigo) {
+				trocarAlugueres(aux, aux->seguinte);
+				trocou = 1;
+			}
+			aux = aux->seguinte;
+		}
+	}
+	return;
+}
+
+#pragma endregion
+
 #pragma region carregarDados
 
 Utilizador* carregarUtilizador(Utilizador* inicio, int codigo, char* utilizador, char* nome, char* password, float saldo, Data dataNascimento, int NIF, char* morada, int gestor, int historico) {
@@ -234,7 +405,7 @@ void listarUtilizador(Utilizador* inicio)
 	printf("==================================================================================================================================================\n");
 }
 
-void listarMeio(Meio* inicio, int gestor)
+void listarMeio(Meio* inicio, int gestor, int opcao, char* posicao)
 {
 	if (gestor == 1) {
 		printf("==============================================================================================================================\n");
@@ -243,10 +414,12 @@ void listarMeio(Meio* inicio, int gestor)
 
 		while (inicio != NULL)
 		{
-			printf("%6d | %-20s | %7.2f | %9.2f | %-56s | %5.2f | %-5s\n",
-				inicio->codigo, inicio->tipo, inicio->estado.bateria, inicio->estado.bateria,
-				inicio->estado.posicao.palavras,
-				inicio->preco, checkSN(inicio->historico));
+			if (opcao == 1 || opcao == 2 || ((opcao == 3) && (!strcmp(inicio->estado.posicao.palavras, posicao)))) {
+				printf("%6d | %-20s | %7.2f | %9.2f | %-56s | %5.2f | %-5s\n",
+					inicio->codigo, inicio->tipo, inicio->estado.bateria, inicio->estado.autonomia,
+					inicio->estado.posicao.palavras,
+					inicio->preco, checkSN(inicio->historico));
+			}
 			inicio = inicio->seguinte;
 		}
 		printf("==============================================================================================================================\n");
@@ -259,10 +432,12 @@ void listarMeio(Meio* inicio, int gestor)
 		while (inicio != NULL)
 		{
 			if (inicio->historico == 0) {
-				printf("%6d | %-20s | %7.2f | %9.2f | %-56s | %5.2f\n",
-					inicio->codigo, inicio->tipo, inicio->estado.bateria, inicio->estado.bateria,
-					inicio->estado.posicao.palavras,
-					inicio->preco);
+				if (opcao == 1 || opcao == 2 || ((opcao == 3) && (!strcmp(inicio->estado.posicao.palavras, posicao)))) {
+					printf("%6d | %-20s | %7.2f | %9.2f | %-56s | %5.2f\n",
+						inicio->codigo, inicio->tipo, inicio->estado.bateria, inicio->estado.autonomia,
+						inicio->estado.posicao.palavras,
+						inicio->preco);
+				}
 			}
 			inicio = inicio->seguinte;
 		}
@@ -618,9 +793,21 @@ int mG1() {
 	return 1;
 }
 
-int mG2(Meio* meios) {
+int mG2(Meio* meios, int opcao, char* posicao) {
 	meios = lerMeios();
-	listarMeio(meios, 1);
+	switch (opcao)
+	{
+	case 1:
+		ordenarMeios(meios, opcao);
+		break;
+	case 2:
+		ordenarMeios(meios, opcao);
+		break;
+	case 3:
+		ordenarMeios(meios, 1);
+		break;
+	}
+	listarMeio(meios, 1, opcao, posicao);
 	free(meios);
 	meios = NULL;
 
@@ -646,6 +833,7 @@ int mG5(Meio* meios, int codigo) {
 	meios = lerMeios(meios);
 	if (existeMeio(meios, codigo)) {
 		apagarMeio(meios, codigo);
+		ordenarMeios(meios, 1);
 		guardarMeios(meios);
 	}
 	free(meios);
@@ -656,6 +844,7 @@ int mG5(Meio* meios, int codigo) {
 
 int mG6(Utilizador* utilizadores) {
 	utilizadores = lerUtilizadores();
+	ordenarUtilizadores(utilizadores);
 	listarUtilizador(utilizadores);
 	free(utilizadores);
 	utilizadores = NULL;
@@ -683,6 +872,7 @@ int mG9(Utilizador* utilizadores, int codigo) {
 	utilizadores = lerUtilizadores(utilizadores);
 	if (existeUtilizador(utilizadores, codigo)) {
 		apagarUtilizador(utilizadores, codigo);
+		ordenarUtilizadores(utilizadores);
 		guardarUtilizadores(utilizadores);
 	}
 	free(utilizadores);
@@ -695,6 +885,7 @@ int mG10(Utilizador* utilizadores, Aluguer* alugueres, Meio* meios, int utilizad
 	meios = lerMeios();
 	utilizadores = lerUtilizadores();
 	alugueres = lerAlugueres();
+	ordenarAlugueres(alugueres);
 	listarAluguer(alugueres, utilizadores, meios, utilizadorAtual, 1);
 
 	free(utilizadores);
@@ -722,11 +913,24 @@ int m1() {
 	return 1;
 }
 
-int m2(Aluguer* alugueres, Meio* meios) {
+int m2(Aluguer* alugueres, Meio* meios, int opcao, char* posicao) {
 	alugueres = lerAlugueres();
 	meios = lerMeios();
 	removerMeioAtivo(meios, alugueres);
-	listarMeio(meios, 0);
+	switch (opcao)
+	{
+	case 1:
+		ordenarMeios(meios, opcao);
+		break;
+	case 2:
+		ordenarMeios(meios, opcao);
+		break;
+	case 3:
+		ordenarMeios(meios, 1);
+		break;
+	}
+
+	listarMeio(meios, 0, opcao, posicao);
 
 	free(alugueres);
 	free(meios);
@@ -743,6 +947,7 @@ int m3(Utilizador* utilizadores, Aluguer* alugueres, int codigo, int codigoUtili
 	utilizadores = lerUtilizadores();
 	if (atualizarSaldo(utilizadores, codigoUtilizador, custo)){
 
+		ordenarUtilizadores(utilizadores);
 		guardarUtilizadores(utilizadores);
 
 		alugueres = carregarAluguer(alugueres, codigo, codigoUtilizador, codigoMeio, 1, custo);
@@ -760,6 +965,7 @@ int m4(Utilizador* utilizadores, Aluguer* alugueres, Meio* meios, int utilizador
 	meios = lerMeios();
 	utilizadores = lerUtilizadores();
 	alugueres = lerAlugueres();
+	ordenarAlugueres(alugueres);
 	listarAluguer(alugueres, utilizadores, meios, utilizadorAtual, 0);
 
 	free(utilizadores);

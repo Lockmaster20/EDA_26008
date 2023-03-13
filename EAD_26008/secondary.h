@@ -89,11 +89,13 @@ int obterUltimoAluguer(Aluguer* inicio);
 
 #pragma region menus
 
+void escolherMenu(int utilizadorAtual, char* nomeAtual, int gestor);
+
 #pragma region opcoesGestor
 
 int mG1();
 
-int mG2(Meio* meios);
+int mG2(Meio* meios, int opcao, char* posicao);
 
 int mG3(Meio* meios, int codigo, char* tipo, Estado estado, float preco);
 
@@ -119,7 +121,7 @@ int mG11();
 
 int m1();
 
-int m2(Aluguer* alugueres, Meio* meios);
+int m2(Aluguer* alugueres, Meio* meios, int opcao, char* posicao);
 
 int m3(Utilizador* utilizadores, Aluguer* alugueres, int codigo, int codigoUtilizador, int codigoMeio, float custo);
 

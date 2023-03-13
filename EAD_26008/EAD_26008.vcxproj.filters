@@ -21,6 +21,9 @@
     <ClCompile Include="secondary.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="menus.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="dados\utilizadores.txt" />
