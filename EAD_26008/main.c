@@ -50,7 +50,7 @@ main() {
 	char nomeAtual[41];
 
 	utilizadores = lerUtilizadores();
-	if (utilizadores != NULL && 1 == 1) {
+	if (utilizadores != NULL && 1 == 0) {		// !!! Apagar a condição para testes
 		login(utilizadores, &utilizadorAtual, &gestor, &nomeAtual);
 		free(utilizadores);
 		utilizadores = NULL;
@@ -60,20 +60,5 @@ main() {
 		}
 	}
 
-	/*Utilizador* utilizadores = NULL;
-	utilizadores = lerUtilizadores();
-	ordenarUtilizadores(utilizadores);
-
-	Meio* meios = NULL;
-	meios = lerMeios();
-	ordenarMeios(meios);
-
-	Aluguer* alugueres = NULL;
-	alugueres = lerAlugueres();
-	ordenarAlugueres(alugueres);
-
-	int aaa = 0;
-	free(utilizadores);
-	free(meios);
-	free(alugueres);*/
+	listarUtilizadorSimples(utilizadores, 5);
 }

@@ -405,6 +405,25 @@ void listarUtilizador(Utilizador* inicio)
 	printf("==================================================================================================================================================\n");
 }
 
+void listarUtilizadorSimples(Utilizador* inicio, int codigo)
+{
+	printf("==============================================\n");
+	printf("                 Dados Atuais                 \n");
+	printf("==============================================\n");
+	while (inicio != NULL)
+	{
+		if (inicio->codigo == codigo) {
+			printf("Codigo: %d\nUtilizador: %s\nPassword: %s\nNome: %s\nMorada: %s\nData de Nascimento: %d-%d-%d\nNIF: %d\nSaldo: %.2f\nGestor: %s\n", 
+				inicio->codigo, inicio->utilizador, inicio->password, inicio->nome, inicio->morada,
+				inicio->dataNascimento.dia, inicio->dataNascimento.mes, inicio->dataNascimento.ano,
+				inicio->NIF, inicio->saldo, checkSN(inicio->gestor));
+		}
+
+		inicio = inicio->seguinte;
+	}
+	printf("==============================================\n");
+}
+
 void listarMeio(Meio* inicio, int gestor, int opcao, char* posicao)
 {
 	if (gestor == 1) {
@@ -945,7 +964,7 @@ int m2(Aluguer* alugueres, Meio* meios, int opcao, char* posicao) {
 
 int m3(Utilizador* utilizadores, Aluguer* alugueres, int codigo, int codigoUtilizador, int codigoMeio, float custo) {
 	int resp = 0;
-	// !!! Verificar se o saldo permite o aluguer e remover o custo do saldo.
+	// Verificar se o saldo permite o aluguer e remover o custo do saldo.
 	utilizadores = lerUtilizadores();
 	if (atualizarSaldo(utilizadores, codigoUtilizador, custo)){
 

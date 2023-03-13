@@ -68,6 +68,12 @@ Aluguer* lerAlugueres();
 
 #pragma endregion
 
+#pragma region listarDados
+
+void listarUtilizadorSimples(Utilizador* inicio, int codigo);
+
+#pragma endregion
+
 #pragma region existeDados
 
 int existeUtilizador(Utilizador* inicio, int codigo);
