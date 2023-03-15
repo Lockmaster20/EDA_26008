@@ -929,6 +929,7 @@ int mG3(Meio* meios, int codigo, char* tipo, Estado estado, float preco) {
 int mG4(Meio* meios, int codigo, char* tipo, Estado estado, float preco) {
 	meios = lerMeios(meios);
 	alterarMeio(meios, codigo, tipo, estado, preco);
+	ordenarMeios(meios, 1);
 	int resp = guardarMeios(meios);
 	return resp;
 }
@@ -971,6 +972,7 @@ int mG7(Utilizador* utilizadores, int codigo, char* utilizador, char* nome, char
 int mG8(Utilizador* utilizadores, int codigo, char* nome, char* password, float saldo, Data dataNascimento, int NIF, char* morada, int gestor) {
 	utilizadores = lerUtilizadores(utilizadores);
 	alterarUtilizador(utilizadores, codigo, nome, password, saldo, dataNascimento, NIF, morada, gestor);
+	ordenarUtilizadores(utilizadores);
 	int resp = guardarUtilizadores(utilizadores);
 	return resp;
 }

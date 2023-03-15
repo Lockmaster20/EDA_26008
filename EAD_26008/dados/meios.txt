@@ -1,5 +1,5 @@
-5;hahaha;99.20;100.00;alfa.sierra.sierra;1.30;0
-4;Teste 1;2.03;5.69;delta.echo.foxtrot;0.12;0
-3;Bicicleta;48.25;9.13;voicing.novelist.bongo;0.04;1
+1;Bicicleta;80.52;20.05;tango.india.tango;0.04;0
 2;Trotinete;100.00;25.00;conversationalists.hypersensitiveness.psychotherapeutics;0.02;0
-1;Bicicleta;84.52;22.13;staircase.hefty.wicks;0.04;0
+3;Bicicleta;48.25;9.13;voicing.novelist.bongo;0.04;1
+4;Teste 1;2.03;5.69;delta.echo.foxtrot;0.12;0
+5;hahaha;99.20;100.00;alfa.sierra.sierra;1.30;0
