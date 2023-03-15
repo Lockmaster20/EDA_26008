@@ -24,7 +24,7 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 	system("cls");
 	while (sucesso != 1) {
 		printf(" %s -- Menu de Gestor:\n\n", nomeAtual);
-		printf("1. Alterar Dados Pessoais\n\n --- Meios\n2. Listar Meios\n3. Adicionar Meio\n4. Editar Meio\n5. Remover Meio\n\n --- Utilizadores\n6. Listar Utilizadores\n7. Adicionar Utilizador\n8. Editar Utilizador\n9. Remover Utilizador\n\n --- Alugueres\n10. Listar Alugueres\n11. Editar Aluguer\n\n0. Sair\n\n-> ");
+		printf("1. Alterar Dados Pessoais\n\n --- Meios\n2. Listar Meios\n3. Adicionar Meio\n4. Editar Meio\n5. Remover Meio\n\n --- Utilizadores\n6. Listar Utilizadores\n7. Adicionar Utilizador\n8. Editar Utilizador\n9. Remover Utilizador\n\n --- Alugueres\n10. Listar Alugueres\n\n0. Sair\n\n-> ");
 
 		scanf("%d", &opcao);
 		getchar();
@@ -73,7 +73,7 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 		case 3:
 			meios = lerMeios();
 			codigo = obterUltimoMeio(meios) + 1;
-			free(meios);
+			freeMeio(meios);
 			meios = NULL;
 
 			printf("Tipo:\n");
@@ -104,7 +104,52 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 				printf("\n--- Erro ao adicionar o meio ---\n\n");
 			break;
 		case 4:
-			mG4();
+			system("cls");
+			existe = 0;
+			while (!existe)
+			{
+				printf("Codigo do meio a editar:\n");
+				scanf("%d", &codigo);
+				getchar();
+
+				meios = lerMeios();
+				existe = existeMeio(meios, codigo);
+
+				if (!existe) {
+					system("cls");
+					printf("\n--- Erro, o meio introduzido nao existe ---\n\n");
+				}
+			}listarMeioSimples(meios, codigo);
+			freeMeio(meios);
+			meios = NULL;
+
+			printf("Tipo:\n");
+			scanf("%[^\n]20s", tipo);
+			getchar();
+
+			printf("Bateria:\n");
+			scanf("%f", &estado.bateria);
+			getchar();
+
+			printf("Autonomia:\n");
+			scanf("%f", &estado.autonomia);
+			getchar();
+
+			printf("Localizacao: (palavra1.palavra2.palavra3)\n");
+			scanf("%[^\n]56s", &estado.posicao.palavras);
+			getchar();
+
+			printf("Preco:\n");
+			scanf("%f", &preco);
+			getchar();
+
+			system("cls");
+			resp = mG4(meios, codigo, tipo, estado, preco);
+			freeMeio(meios);
+			if (resp == 1)
+				printf("\n--- Meio alterado com sucesso ---\n\n");
+			else
+				printf("\n--- Erro ao alterar o meio ---\n\n");
 			break;
 		case 5:
 			system("cls");
@@ -117,7 +162,7 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 
 				meios = lerMeios();
 				existe = existeMeio(meios, codigo);
-				free(meios);
+				freeMeio(meios);
 				meios = NULL;
 
 				if (!existe) {
@@ -140,8 +185,6 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 			system("cls");
 			utilizadores = lerUtilizadores();
 			codigo = obterUltimoUtilizador(utilizadores) + 1;
-			free(utilizadores);
-			utilizadores = NULL;
 
 			existe = 1;
 			while (existe)
@@ -149,18 +192,16 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 				printf("Utilizador:\n");
 				scanf("%10s", utilizador);
 				getchar();
-
-				utilizadores = lerUtilizadores();
 				existe = existeUser(utilizadores, utilizador);
-
-				free(utilizadores);
-				utilizadores = NULL;
 
 				if (existe) {
 					system("cls");
 					printf("\n--- Erro, o utilizador introduzido ja existe ---\n\n");
 				}
 			}
+			freeUtilizador(utilizadores);
+			utilizadores = NULL;
+
 			printf("Nome:\n");
 			scanf("%[^\n]40s", nome);
 			getchar();
@@ -191,14 +232,70 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 
 			system("cls");
 			resp = mG7(utilizadores, codigo, utilizador, nome, password, saldo, dataNascimento, NIF, morada, gestor);
-
+			freeUtilizador(utilizadores);
 			if (resp == 1)
 				printf("\n--- Utilizador adicionado com sucesso ---\n\n");
 			else
 				printf("\n--- Erro ao adicionar o utilizador ---\n\n");
 			break;
 		case 8:
-			mG8();
+			system("cls");
+			utilizadores = lerUtilizadores();
+
+			existe = 0;
+			while (!existe)
+			{
+				printf("Codigo do utilizador a editar:\n");
+				scanf("%d", &codigo);
+				getchar();
+
+				existe = existeUtilizadorAtivo(utilizadores, codigo);
+
+				if (!existe) {
+					system("cls");
+					printf("\n--- Erro, nao e possivel editar o utilizador introduzido ---\n\n");
+				}
+			}
+			system("cls");
+			listarUtilizadorSimples(utilizadores, codigo);
+			freeUtilizador(utilizadores);
+			utilizadores = NULL;
+
+			printf("Nome:\n");
+			scanf("%[^\n]40s", nome);
+			getchar();
+
+			printf("Password:\n");
+			scanf("%[^\n]10s", password);
+			getchar();
+
+			printf("Saldo:\n");
+			scanf("%f", &saldo);
+			getchar();
+
+			printf("Data de Nascimento: (d-m-aaaa)\n");
+			scanf("%d-%d-%d", &dataNascimento.dia, &dataNascimento.mes, &dataNascimento.ano);
+			getchar();
+
+			printf("NIF:\n");
+			scanf("%d", &NIF);
+			getchar();
+
+			printf("Morada:\n");
+			scanf("%[^\n]30s", morada);
+			getchar();
+
+			printf("Gestor: (1 | 0)\n");
+			scanf("%d", &gestor);
+			getchar();
+
+			system("cls");
+			resp = mG8(utilizadores, codigo, nome, password, saldo, dataNascimento, NIF, morada, gestor);
+
+			if (resp == 1)
+				printf("\n--- Utilizador alterado com sucesso ---\n\n");
+			else
+				printf("\n--- Erro ao alterar o utilizador ---\n\n");
 			break;
 		case 9:
 			system("cls");
@@ -211,7 +308,7 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 
 				utilizadores = lerUtilizadores();
 				existe = existeUtilizador(utilizadores, codigo);
-				free(utilizadores);
+				freeUtilizador(utilizadores);
 				utilizadores = NULL;
 
 				if (!existe) {
@@ -230,9 +327,6 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 			system("cls");
 			mG10(utilizadores, alugueres, meios, utilizadorAtual);
 			break;
-		case 11:
-			mG11();
-			break;
 		default:
 			system("cls");
 			printf("\n--- Valor invalido, tente novamente ---\n\n");
@@ -247,14 +341,14 @@ int menu(int utilizadorAtual, char* nomeAtual) {
 	Utilizador* utilizadores = NULL;
 	Meio* meios = NULL;
 	Aluguer* alugueres = NULL;
-	int opcao, sucesso = 0, existe, codigo, codigoMeio, opcaoList, resp;
+	int opcao, sucesso = 0, existe, codigo, codigoMeio, codigoAluguer, opcaoList, resp;
 	char posicao[57];
 	float custo;
 
 	system("cls");
 	while (sucesso != 1) {
 		printf(" %s -- Menu:\n\n", nomeAtual);
-		printf("1. Alterar Dados Pessoais\n2. Listar Meios Disponiveis\n3. Alugar Meio\n4. Historico\n\n0. Sair\n\n-> ");
+		printf("1. Alterar Dados Pessoais\n2. Listar Meios Disponiveis\n3. Alugar Meio\n4. Terminar Aluguer\n5. Historico\n\n0. Sair\n\n-> ");
 
 		scanf("%d", &opcao);
 		scanf("%*c");
@@ -299,16 +393,10 @@ int menu(int utilizadorAtual, char* nomeAtual) {
 		case 3:
 			system("cls");
 			alugueres = lerAlugueres();
-			existe = existeAluguerAtivo(alugueres, utilizadorAtual);
-
-			free(alugueres);
-			alugueres = NULL;
+			existe = existeAluguerAtivo(alugueres, utilizadorAtual, NULL);
 
 			if (!existe) {
-				alugueres = lerAlugueres();
 				codigo = obterUltimoAluguer(alugueres) + 1;
-				free(alugueres);
-				alugueres = NULL;
 
 				existe = 1;
 				while (existe)
@@ -318,13 +406,10 @@ int menu(int utilizadorAtual, char* nomeAtual) {
 					getchar();
 
 					meios = lerMeios();
-					alugueres = lerAlugueres();
 					existe = (existeMeio(meios, codigo) && existeAluguerMeio(alugueres, codigo));
 
-					free(meios);
+					freeMeio(meios);
 					meios = NULL;
-					free(alugueres);
-					alugueres = NULL;
 
 					if (existe) {
 						system("cls");
@@ -346,10 +431,33 @@ int menu(int utilizadorAtual, char* nomeAtual) {
 			else {
 				printf("\n--- Nao pode alugar outro meio enquanto tiver um aluguer ativo ---\n\n");
 			}
+
+			freeAluguer(alugueres);
+			alugueres = NULL;
 			break;
 		case 4:
 			system("cls");
-			m4(utilizadores, alugueres, meios, utilizadorAtual);
+			alugueres = lerAlugueres();
+			existe = existeAluguerAtivo(alugueres, utilizadorAtual, &codigoAluguer);
+			if (existe) {
+
+				resp = m4(alugueres, codigoAluguer);
+				if (resp == 1)
+					printf("\n--- Aluguer terminado com sucesso ---\n\n");
+				else
+					printf("\n--- Erro ao terminar o aluguer ---\n\n");
+			}
+			else
+			{
+				printf("\n--- Nao tem um aluguer ativo ---\n\n");
+			}
+			freeAluguer(alugueres);
+			alugueres = NULL;
+			
+			break;
+		case 5:
+			system("cls");
+			m5(utilizadores, alugueres, meios, utilizadorAtual);
 			break;
 		default:
 			system("cls");

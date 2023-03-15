@@ -50,15 +50,13 @@ main() {
 	char nomeAtual[41];
 
 	utilizadores = lerUtilizadores();
-	if (utilizadores != NULL && 1 == 0) {		// !!! Apagar a condição para testes
+	if (utilizadores != NULL && 1 == 1) {		// !!! Apagar a condição para testes
 		login(utilizadores, &utilizadorAtual, &gestor, &nomeAtual);
-		free(utilizadores);
+		freeUtilizador(utilizadores);
 		utilizadores = NULL;
 
 		if (utilizadorAtual) {
 			escolherMenu(utilizadorAtual, nomeAtual, gestor);
 		}
 	}
-
-	listarUtilizadorSimples(utilizadores, 5);
 }

@@ -58,6 +58,16 @@ typedef struct registoAluguer {
 
 #pragma endregion
 
+#pragma region libertarMemoria
+
+void freeUtilizador(Utilizador* inicio);
+
+void freeMeio(Meio* inicio);
+
+void freeAluguer(Aluguer* inicio);
+
+#pragma endregion
+
 #pragma region lerDocumentos
 
 Utilizador* lerUtilizadores();
@@ -72,16 +82,19 @@ Aluguer* lerAlugueres();
 
 void listarUtilizadorSimples(Utilizador* inicio, int codigo);
 
+void listarMeioSimples(Meio* inicio, int codigo);
+
 #pragma endregion
 
 #pragma region existeDados
 
 int existeUtilizador(Utilizador* inicio, int codigo);
+int existeUtilizadorAtivo(Utilizador* inicio, int codigo);
 int existeUser(Utilizador* inicio, char* utilizador);
 int existeMeio(Meio* inicio, int codigo);
 int existeAluguer(Aluguer* inicio, int codigo);
 int existeAluguerMeio(Aluguer* inicio, int codigo);
-int existeAluguerAtivo(Aluguer* inicio, int codigo);
+int existeAluguerAtivo(Aluguer* inicio, int codigo, int* codigoAluguer);
 
 #pragma endregion
 
@@ -105,7 +118,7 @@ int mG2(Meio* meios, int opcao, char* posicao);
 
 int mG3(Meio* meios, int codigo, char* tipo, Estado estado, float preco);
 
-int mG4();
+int mG4(Meio* meios, int codigo, char* tipo, Estado estado, float preco);
 
 int mG5(Meio* meios, int codigo);
 
@@ -113,13 +126,11 @@ int mG6(Utilizador* utilizadores);
 
 int mG7(Utilizador* utilizadores, int codigo, char* utilizador, char* nome, char* password, float saldo, Data dataNascimento, int NIF, char* morada, int gestor);
 
-int mG8();
+int mG8(Utilizador* utilizadores, int codigo, char* nome, char* password, float saldo, Data dataNascimento, int NIF, char* morada, int gestor);
 
 int mG9(Utilizador* utilizadores, int codigo);
 
 int mG10(Utilizador* utilizadores, Aluguer* alugueres, Meio* meios, int utilizadorAtual);
-
-int mG11();
 
 #pragma endregion
 
@@ -131,7 +142,9 @@ int m2(Aluguer* alugueres, Meio* meios, int opcao, char* posicao);
 
 int m3(Utilizador* utilizadores, Aluguer* alugueres, int codigo, int codigoUtilizador, int codigoMeio, float custo);
 
-int m4(Utilizador* utilizadores, Aluguer* alugueres, Meio* meios, int utilizadorAtual);
+int m4(Aluguer* alugueres, int codigo);
+
+int m5(Utilizador* utilizadores, Aluguer* alugueres, Meio* meios, int utilizadorAtual);
 
 #pragma endregion
 
