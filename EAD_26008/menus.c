@@ -35,7 +35,7 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 		case 1:
 			system("cls");
 			utilizadores = lerUtilizadores();
-			listarUtilizadorSimples(utilizadores, utilizadorAtual);
+			listarUtilizadorSimples(utilizadores, utilizadorAtual, NULL);
 			freeUtilizador(utilizadores);
 			utilizadores = NULL;
 
@@ -299,7 +299,7 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 				}
 			}
 			system("cls");
-			listarUtilizadorSimples(utilizadores, codigo);
+			listarUtilizadorSimples(utilizadores, codigo, NULL);
 			freeUtilizador(utilizadores);
 			utilizadores = NULL;
 
@@ -403,7 +403,7 @@ int menu(int utilizadorAtual, char* nomeAtual) {
 		case 1:
 			system("cls");
 			utilizadores = lerUtilizadores();
-			listarUtilizadorSimples(utilizadores, utilizadorAtual);
+			listarUtilizadorSimples(utilizadores, utilizadorAtual, &saldo);
 			freeUtilizador(utilizadores);
 			utilizadores = NULL;
 
@@ -413,10 +413,6 @@ int menu(int utilizadorAtual, char* nomeAtual) {
 
 			printf("Password:\n");
 			scanf("%[^\n]10s", password);
-			getchar();
-
-			printf("Saldo:\n");
-			scanf("%f", &saldo);
 			getchar();
 
 			printf("Data de Nascimento: (d-m-aaaa)\n");

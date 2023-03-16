@@ -80,7 +80,7 @@ Aluguer* lerAlugueres();
 
 #pragma region listarDados
 
-void listarUtilizadorSimples(Utilizador* inicio, int codigo);
+void listarUtilizadorSimples(Utilizador* inicio, int codigo, float* saldo);
 
 void listarMeioSimples(Meio* inicio, int codigo);
 
@@ -112,7 +112,7 @@ void escolherMenu(int utilizadorAtual, char* nomeAtual, int gestor);
 
 #pragma region opcoesGestor
 
-int mG1();
+int mG1(Utilizador* utilizadores, int codigo, char* nome, char* password, float saldo, Data dataNascimento, int NIF, char* morada, int gestor);
 
 int mG2(Meio* meios, int opcao, char* posicao);
 
@@ -136,7 +136,7 @@ int mG10(Utilizador* utilizadores, Aluguer* alugueres, Meio* meios, int utilizad
 
 #pragma region opcoesCliente
 
-int m1();
+int m1(Utilizador* utilizadores, int codigo, char* nome, char* password, float saldo, Data dataNascimento, int NIF, char* morada, int gestor);
 
 int m2(Aluguer* alugueres, Meio* meios, int opcao, char* posicao);
 

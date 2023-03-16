@@ -405,7 +405,7 @@ void listarUtilizador(Utilizador* inicio)
 	printf("==================================================================================================================================================\n");
 }
 
-void listarUtilizadorSimples(Utilizador* inicio, int codigo)
+void listarUtilizadorSimples(Utilizador* inicio, int codigo, float* saldo)
 {
 	printf("==============================================\n");
 	printf("\tDados Atuais\n");
@@ -417,6 +417,8 @@ void listarUtilizadorSimples(Utilizador* inicio, int codigo)
 				inicio->codigo, inicio->utilizador, inicio->password, inicio->nome, inicio->morada,
 				inicio->dataNascimento.dia, inicio->dataNascimento.mes, inicio->dataNascimento.ano,
 				inicio->NIF, inicio->saldo, checkSN(inicio->gestor));
+			if (saldo != NULL)
+				*saldo = inicio->saldo;
 		}
 
 		inicio = inicio->seguinte;
@@ -890,9 +892,12 @@ int obterUltimoAluguer(Aluguer* inicio) {
 
 #pragma region opcoesGestor
 
-int mG1() {
-	printf("\n\nOperação especifica\n\n");
-	return 1;
+int mG1(Utilizador* utilizadores, int codigo, char* nome, char* password, float saldo, Data dataNascimento, int NIF, char* morada, int gestor) {
+	utilizadores = lerUtilizadores(utilizadores);
+	alterarUtilizador(utilizadores, codigo, nome, password, saldo, dataNascimento, NIF, morada, gestor);
+	ordenarUtilizadores(utilizadores);
+	int resp = guardarUtilizadores(utilizadores);
+	return resp;
 }
 
 int mG2(Meio* meios, int opcao, char* posicao) {
@@ -1013,9 +1018,12 @@ int mG10(Utilizador* utilizadores, Aluguer* alugueres, Meio* meios, int utilizad
 
 #pragma region opcoesCliente
 
-int m1() {
-	printf("\n\nOperação geral\n\n");
-	return 1;
+int m1(Utilizador* utilizadores, int codigo, char* nome, char* password, float saldo, Data dataNascimento, int NIF, char* morada, int gestor) {
+	utilizadores = lerUtilizadores(utilizadores);
+	alterarUtilizador(utilizadores, codigo, nome, password, saldo, dataNascimento, NIF, morada, gestor);
+	ordenarUtilizadores(utilizadores);
+	int resp = guardarUtilizadores(utilizadores);
+	return resp;
 }
 
 int m2(Aluguer* alugueres, Meio* meios, int opcao, char* posicao) {
