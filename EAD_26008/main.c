@@ -4,6 +4,9 @@
 #include <string.h>
 #include "secondary.h"
 
+// Pede dados de login ao utilizador
+// Verifica os dados introduzidos
+// Ao validar os dados introduzidos, altera os dados da sessão atual e devolve 1
 void login(Utilizador* inicio, int* utilizadorAtual, int* gestor, char* nomeAtual) {
 
 	Utilizador* aux;
@@ -37,20 +40,24 @@ void login(Utilizador* inicio, int* utilizadorAtual, int* gestor, char* nomeAtua
 		}
 		system("cls");
 		if (sucesso == 0)
-			printf("\n------ERRO------\n\n");
+			printf("\n--- Dados invalidos, tente novamente ---\n\n");
 	}
 
 	return;
 }
 
+// Carrega os dados dos utilizadores em "utilizadores.txt"
+// Se tiver dados executa a função login
+// Depois de fazer login liberta a memória utilizada e passa para a função de escolher o menu
 main() {
 
-	Utilizador* utilizadores = NULL;			// Lista ligada vazia 
-	int utilizadorAtual = 0, gestor = 0;			//Dados da sessão
+	Utilizador* utilizadores = NULL;
+	// Dados da sessão
+	int utilizadorAtual = 0, gestor = 0;
 	char nomeAtual[41];
 
 	utilizadores = lerUtilizadores();
-	if (utilizadores != NULL && 1 == 1) {		// !!! Apagar a condição para testes
+	if (utilizadores != NULL) {
 		login(utilizadores, &utilizadorAtual, &gestor, &nomeAtual);
 		freeUtilizador(utilizadores);
 		utilizadores = NULL;

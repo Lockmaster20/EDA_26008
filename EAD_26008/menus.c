@@ -6,6 +6,10 @@
 
 #pragma region menus
 
+// Ambos os menus funcionam da mesma maneira
+// Apresenta as opções ao utilizador e quando o utilizador escolher uma opção válida vai executar as funções para realizar essa ação
+
+// O menu de gestor permite realizar mais ações do que o menu de clientes
 int menuGestor(int utilizadorAtual, char* nomeAtual) {
 
 	Utilizador* utilizadores = NULL;
@@ -13,8 +17,8 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 	Aluguer* alugueres = NULL;
 	int opcao, sucesso = 0, existe;
 
-	//Dados scanf adicionar/alterar
-	int codigo, NIF, gestor, historico, opcaoList, resp;
+	//Dados introduzidos pelo utilizador
+	int opcao, opcaoList, codigo, NIF, gestor, historico, resp;
 	char utilizador[11], nome[41], password[11], morada[31], tipo[21], posicao[57];
 	float saldo, preco;
 	Data dataNascimento;
@@ -334,8 +338,11 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 			system("cls");
 			resp = mG8(utilizadores, codigo, nome, password, saldo, dataNascimento, NIF, morada, gestor);
 
-			if (resp == 1)
+			if (resp == 1) {
 				printf("\n--- Utilizador alterado com sucesso ---\n\n");
+				if (codigo == utilizadorAtual)
+					sucesso = 1;
+			}
 			else
 				printf("\n--- Erro ao alterar o utilizador ---\n\n");
 			break;
@@ -378,6 +385,7 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 	return 0;
 }
 
+// O menu de cliente tem menos opções do que o menu de gestor, mas permite alugar um meio
 int menu(int utilizadorAtual, char* nomeAtual) {
 
 	Utilizador* utilizadores = NULL;
@@ -550,6 +558,7 @@ int menu(int utilizadorAtual, char* nomeAtual) {
 
 #pragma endregion
 
+// Através dos dados obtidos escolhe o menu de gestor ou o menu de clientes
 void escolherMenu(int utilizadorAtual, char* nomeAtual, int gestor) {
 	if (utilizadorAtual) {
 		if (gestor == 1) {
