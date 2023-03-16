@@ -18,7 +18,7 @@ typedef struct registoContacto {
 typedef struct registoEstado {
 	float bateria;
 	float autonomia;
-	Posicao posicao;				// posição do meio através de 3 palavras (what3words.com)
+	Posicao posicao;
 } Estado;
 
 typedef struct registoMeio {

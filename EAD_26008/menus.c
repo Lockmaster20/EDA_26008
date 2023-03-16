@@ -14,7 +14,6 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 	int opcao, sucesso = 0, existe;
 
 	//Dados scanf adicionar/alterar
-
 	int codigo, NIF, gestor, historico, opcaoList, resp;
 	char utilizador[11], nome[41], password[11], morada[31], tipo[21], posicao[57];
 	float saldo, preco;
@@ -34,7 +33,50 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 			sucesso = 1;
 			break;
 		case 1:
-			mG1();
+			system("cls");
+			utilizadores = lerUtilizadores();
+			listarUtilizadorSimples(utilizadores, utilizadorAtual);
+			freeUtilizador(utilizadores);
+			utilizadores = NULL;
+
+			printf("Nome:\n");
+			scanf("%[^\n]40s", nome);
+			getchar();
+
+			printf("Password:\n");
+			scanf("%[^\n]10s", password);
+			getchar();
+
+			printf("Saldo:\n");
+			scanf("%f", &saldo);
+			getchar();
+
+			printf("Data de Nascimento: (d-m-aaaa)\n");
+			scanf("%d-%d-%d", &dataNascimento.dia, &dataNascimento.mes, &dataNascimento.ano);
+			getchar();
+
+			printf("NIF:\n");
+			scanf("%d", &NIF);
+			getchar();
+
+			printf("Morada:\n");
+			scanf("%[^\n]30s", morada);
+			getchar();
+
+			printf("Gestor: (1 | 0)\n");
+			scanf("%d", &gestor);
+			getchar();
+
+			system("cls");
+			resp = mG1(utilizadores, utilizadorAtual, nome, password, saldo, dataNascimento, NIF, morada, gestor);
+
+			if (resp == 1)
+			{
+				printf("\n--- Utilizador alterado com sucesso ---\n\n");
+				sucesso = 1;
+			}
+			else
+				printf("\n--- Erro ao alterar o utilizador ---\n\n");
 			break;
 		case 2:
 			system("cls");
@@ -341,9 +383,10 @@ int menu(int utilizadorAtual, char* nomeAtual) {
 	Utilizador* utilizadores = NULL;
 	Meio* meios = NULL;
 	Aluguer* alugueres = NULL;
-	int opcao, sucesso = 0, existe, codigo, codigoMeio, codigoAluguer, opcaoList, resp;
-	char posicao[57];
-	float custo;
+	int opcao, sucesso = 0, existe, codigo, codigoMeio, codigoAluguer, NIF, opcaoList, resp;
+	char posicao[57], nome[41], password[11], morada[31];
+	float custo, saldo;
+	Data dataNascimento;
 
 	system("cls");
 	while (sucesso != 1) {
@@ -358,7 +401,47 @@ int menu(int utilizadorAtual, char* nomeAtual) {
 			sucesso = 1;
 			break;
 		case 1:
-			m1();
+			system("cls");
+			utilizadores = lerUtilizadores();
+			listarUtilizadorSimples(utilizadores, utilizadorAtual);
+			freeUtilizador(utilizadores);
+			utilizadores = NULL;
+
+			printf("Nome:\n");
+			scanf("%[^\n]40s", nome);
+			getchar();
+
+			printf("Password:\n");
+			scanf("%[^\n]10s", password);
+			getchar();
+
+			printf("Saldo:\n");
+			scanf("%f", &saldo);
+			getchar();
+
+			printf("Data de Nascimento: (d-m-aaaa)\n");
+			scanf("%d-%d-%d", &dataNascimento.dia, &dataNascimento.mes, &dataNascimento.ano);
+			getchar();
+
+			printf("NIF:\n");
+			scanf("%d", &NIF);
+			getchar();
+
+			printf("Morada:\n");
+			scanf("%[^\n]30s", morada);
+			getchar();
+
+			system("cls");
+			resp = m1(utilizadores, utilizadorAtual, nome, password, saldo, dataNascimento, NIF, morada, 0);
+
+			if (resp == 1)
+			{
+				printf("\n--- Utilizador alterado com sucesso ---\n\n");
+				sucesso = 1;
+			}
+			else
+				printf("\n--- Erro ao alterar o utilizador ---\n\n");
+			break;
 			break;
 		case 2:
 			existe = 1;
