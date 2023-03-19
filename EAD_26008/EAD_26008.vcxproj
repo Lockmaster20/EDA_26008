@@ -139,6 +139,31 @@
   <ItemGroup>
     <ClInclude Include="secondary.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="documentacao\html\annotated.html" />
+    <None Include="documentacao\html\classes.html" />
+    <None Include="documentacao\html\dir_4de09a2694f60173946b5ae5217027dc.html" />
+    <None Include="documentacao\html\files.html" />
+    <None Include="documentacao\html\functions.html" />
+    <None Include="documentacao\html\functions_vars.html" />
+    <None Include="documentacao\html\globals.html" />
+    <None Include="documentacao\html\globals_defs.html" />
+    <None Include="documentacao\html\globals_func.html" />
+    <None Include="documentacao\html\globals_type.html" />
+    <None Include="documentacao\html\index.html" />
+    <None Include="documentacao\html\main_8c.html" />
+    <None Include="documentacao\html\menus_8c.html" />
+    <None Include="documentacao\html\secondary_8c.html" />
+    <None Include="documentacao\html\secondary_8h.html" />
+    <None Include="documentacao\html\secondary_8h_source.html" />
+    <None Include="documentacao\html\structregisto_aluguer.html" />
+    <None Include="documentacao\html\structregisto_contacto.html" />
+    <None Include="documentacao\html\structregisto_data.html" />
+    <None Include="documentacao\html\structregisto_estado.html" />
+    <None Include="documentacao\html\structregisto_meio.html" />
+    <None Include="documentacao\html\structregisto_posicao.html" />
+    <None Include="documentacao\html\structregisto_utilizador.html" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

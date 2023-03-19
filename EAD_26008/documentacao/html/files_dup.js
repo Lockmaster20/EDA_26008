@@ -1,7 +1,4 @@
 var files_dup =
 [
-    [ "main.c", "main_8c.html", "main_8c" ],
-    [ "menus.c", "menus_8c.html", "menus_8c" ],
-    [ "secondary.c", "secondary_8c.html", "secondary_8c" ],
-    [ "secondary.h", "secondary_8h.html", "secondary_8h" ]
+    [ "source", "dir_b2f33c71d4aa5e7af42a1ca61ff5af1b.html", "dir_b2f33c71d4aa5e7af42a1ca61ff5af1b" ]
 ];

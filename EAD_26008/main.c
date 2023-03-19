@@ -4,9 +4,9 @@
 #include <string.h>
 #include "secondary.h"
 
-/// Pede dados de login ao utilizador
-/// Verifica os dados introduzidos
-/// Ao validar os dados introduzidos, altera os dados da sessão atual e devolve 1
+/// Pede dados de login ao utilizador, 
+/// verifica os dados introduzidos, 
+/// ao validar os dados introduzidos, altera os dados da sessão atual e devolve 1
 void login(Utilizador* inicio, int* utilizadorAtual, int* gestor, char* nomeAtual) {
 
 	Utilizador* aux;
@@ -46,9 +46,9 @@ void login(Utilizador* inicio, int* utilizadorAtual, int* gestor, char* nomeAtua
 	return;
 }
 
-/// Carrega os dados dos utilizadores em "utilizadores.txt"
-/// Se tiver dados executa a função login
-/// Depois de fazer login liberta a memória utilizada e passa para a função de escolher o menu
+/// Carrega os dados dos utilizadores em "utilizadores.txt", 
+/// se tiver dados executa a função login, 
+/// depois de fazer login liberta a memória utilizada e passa para a função de escolher o menu
 main() {
 
 	Utilizador* utilizadores = NULL;

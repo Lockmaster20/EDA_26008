@@ -6,7 +6,7 @@
 
 #pragma region menus
 
-/// Ambos os menus funcionam da mesma maneira
+/// Ambos os menus funcionam da mesma maneira; 
 /// Apresenta as opções ao utilizador e quando o utilizador escolher uma opção válida vai executar as funções para realizar essa ação
 
 /// O menu de gestor permite realizar mais ações do que o menu de clientes

@@ -21,7 +21,7 @@ const char* checkSN(int i) {
 
 #pragma region libertarMemoria
 
-/// Funções para libertar a memória utilizada pelas ligas ligadas
+/// Funções para libertar a memória utilizada pelas ligas ligadas; 
 /// Recebe a lista ligada, enquanto a lista não estiver vazia, liberta a memória da "atual" e passa para a seguinte
 
 /// Liberta a memória utilizada pela lista de utilizadores
