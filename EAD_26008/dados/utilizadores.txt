@@ -7,5 +7,3 @@
 7;huhuhu;GGG AAA BBB;1234;5.00;2000-12-15;555555555;Rua do Meio, 23;0;1
 8;u123;bino;teste;45.00;2000-12-20;123456987;Rua de Morada;0;0
 9;u123;n123;p123;19.00;2018-12-16;15;m123;0;1
-10;Hugovski;Hugo Vitorino;555;0.00;1990-1-1;852963741;Pousada da Beira, 7.5;0;0
-11;bino@bino;Bino da Bina Bino;8oo8;7.44;2000-2-28;111555999;Praca do Bino, 1;1;0

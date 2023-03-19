@@ -4,6 +4,10 @@
 #include <string.h>
 #include "secondary.h"
 
+///
+///	Recebe um int
+///	Se for 1 devolve "sim", se for 0 devolve "nao"
+///
 const char* checkSN(int i) {
 
 	switch (i)
@@ -17,6 +21,10 @@ const char* checkSN(int i) {
 
 #pragma region libertarMemoria
 
+/// Funções para libertar a memória utilizada pelas ligas ligadas
+/// Recebe a lista ligada, enquanto a lista não estiver vazia, liberta a memória da "atual" e passa para a seguinte
+
+/// Liberta a memória utilizada pela lista de utilizadores
 void freeUtilizador(Utilizador* inicio) {
 	Utilizador* aux;
 
@@ -29,6 +37,7 @@ void freeUtilizador(Utilizador* inicio) {
 	inicio = NULL;
 }
 
+/// Liberta a memória utilizada pela lista de meios
 void freeMeio(Meio* inicio) {
 	Meio* aux;
 
@@ -40,6 +49,7 @@ void freeMeio(Meio* inicio) {
 	}
 }
 
+/// Liberta a memória utilizada pela lista de alugueres
 void freeAluguer(Aluguer* inicio) {
 	Aluguer* aux;
 
@@ -55,6 +65,12 @@ void freeAluguer(Aluguer* inicio) {
 
 #pragma region ordenarDados
 
+///
+///	Função para trocar os dados de uma lista de utilizadores para outra
+///	Recebe dados de duas listas, copia os dados da primeira lista para uma lista auxiliar
+///	Depois copia os dados da lista seguinte para a primeira lista
+///	Por fim copia os dados da lista auxiliar para a segunda lista
+///
 void trocarUtilizadores(Utilizador* inicio, Utilizador* seg) {
 
 	Utilizador aux;
@@ -95,6 +111,11 @@ void trocarUtilizadores(Utilizador* inicio, Utilizador* seg) {
 	return;
 }
 
+///
+///	Função para ordenar os utilizadores
+///	Recebe a lista, se não estiver vazia verifica se o código do utilizador seguinte é menor
+///	Se se verificar, executa a função para trocar as posições e marca que houve uma troca
+/// 
 void ordenarUtilizadores(Utilizador* inicio) {
 	int trocou = 1;
 	Utilizador* aux;
@@ -117,6 +138,12 @@ void ordenarUtilizadores(Utilizador* inicio) {
 	return;
 }
 
+///
+///	Função para trocar os dados de uma lista de meios para outra
+///	Recebe dados de duas listas, copia os dados da primeira lista para uma lista auxiliar
+///	Depois copia os dados da lista seguinte para a primeira lista
+///	Por fim copia os dados da lista auxiliar para a segunda lista
+///
 void trocarMeios(Meio* inicio, Meio* seg) {
 
 	Meio aux;
@@ -142,6 +169,12 @@ void trocarMeios(Meio* inicio, Meio* seg) {
 	return;
 }
 
+///
+///	Função para ordenar os meios
+///	Recebe a lista e a opção de ordenação
+///	Se não estiver vazia verifica vai executar o código da opção introduzida
+///	Se a opção for 1 vai ordenar por código, se for 2 vai ordenar por ordem decrescente de autonomia
+///
 void ordenarMeios(Meio* inicio, int opcao) {
 	int trocou = 1;
 	Meio* aux;
@@ -175,6 +208,12 @@ void ordenarMeios(Meio* inicio, int opcao) {
 	return;
 }
 
+///
+///	Função para trocar os dados de uma lista de alugueres para outra
+///	Recebe dados de duas listas, copia os dados da primeira lista para uma lista auxiliar
+///	Depois copia os dados da lista seguinte para a primeira lista
+///	Por fim copia os dados da lista auxiliar para a segunda lista
+///
 void trocarAlugueres(Aluguer* inicio, Aluguer* seg) {
 
 	Aluguer aux;
@@ -200,6 +239,11 @@ void trocarAlugueres(Aluguer* inicio, Aluguer* seg) {
 	return;
 }
 
+///
+///	Função para ordenar os alugueres
+///	Recebe a lista, se não estiver vazia verifica se o código do aluguer seguinte é menor
+///	Se se verificar, executa a função para trocar as posições e marca que houve uma troca
+///
 void ordenarAlugueres(Aluguer* inicio) {
 	int trocou = 1;
 	Aluguer* aux;
@@ -226,6 +270,7 @@ void ordenarAlugueres(Aluguer* inicio) {
 
 #pragma region carregarDados
 
+/// Insere um novo registo na lista dos utilizadores
 Utilizador* carregarUtilizador(Utilizador* inicio, int codigo, char* utilizador, char* nome, char* password, float saldo, Data dataNascimento, int NIF, char* morada, int gestor, int historico) {
 
 	Utilizador* novo = malloc(sizeof(struct registoUtilizador));
@@ -250,6 +295,7 @@ Utilizador* carregarUtilizador(Utilizador* inicio, int codigo, char* utilizador,
 	}
 }
 
+/// Insere um novo registo na lista dos meios
 Meio* carregarMeio(Meio* inicio, int codigo, char* tipo, Estado estado, float preco, int historico) {
 
 	Meio* novo = malloc(sizeof(struct registoMeio));
@@ -269,6 +315,7 @@ Meio* carregarMeio(Meio* inicio, int codigo, char* tipo, Estado estado, float pr
 	}
 }
 
+/// Insere um novo registo na lista dos alugueres
 Aluguer* carregarAluguer(Aluguer* inicio, int codigo, int codigoUtilizador, int codigoMeio, int ativo, float custo) {
 
 	Aluguer* novo = malloc(sizeof(struct registoAluguer));
@@ -290,6 +337,11 @@ Aluguer* carregarAluguer(Aluguer* inicio, int codigo, int codigoUtilizador, int 
 
 #pragma region lerDocumentos
 
+///
+///	Função para ler os dados do ficheiro 'utilizadores.txt'
+///	Para cada linha lê os dados e verifica se tem o número certo de dados
+///	Se se verificar envia os dados para a função 'carregarUtilizador'
+///
 Utilizador* lerUtilizadores()
 {
 	FILE* fp;
@@ -320,6 +372,11 @@ Utilizador* lerUtilizadores()
 	return(aux);
 }
 
+///
+///	Função para ler os dados do ficheiro 'meios.txt'
+///	Para cada linha lê os dados e verifica se tem o número certo de dados
+///	Se se verificar envia os dados para a função 'carregarMeio'
+///
 Meio* lerMeios()
 {
 	FILE* fp;
@@ -354,6 +411,11 @@ Meio* lerMeios()
 	return(aux);
 }
 
+///
+///	Função para ler os dados do ficheiro 'alugueres.txt'
+///	Para cada linha lê os dados e verifica se tem o número certo de dados
+///	Se se verificar envia os dados para a função 'carregarAlugueres'
+///
 Aluguer* lerAlugueres()
 {
 	FILE* fp;
@@ -388,6 +450,10 @@ Aluguer* lerAlugueres()
 
 #pragma region listarDados
 
+///
+///	Função para listar os dados de uma lista de utilizadores
+///	Recebe a lista, imprime a estrutura da lista e depois, para cada item da lista imprime os dados
+///
 void listarUtilizador(Utilizador* inicio)
 {
 	printf("==================================================================================================================================================\n");
@@ -402,9 +468,10 @@ void listarUtilizador(Utilizador* inicio)
 			inicio->NIF, inicio->saldo, checkSN(inicio->gestor), checkSN(inicio->historico));
 		inicio = inicio->seguinte;
 	}
-	printf("==================================================================================================================================================\n");
+	printf("==================================================================================================================================================\n\n");
 }
 
+/// Imprime os dados correspondentes ao codigo do utilizador recebido e altera o valor do saldo recebido
 void listarUtilizadorSimples(Utilizador* inicio, int codigo, float* saldo)
 {
 	printf("==============================================\n");
@@ -426,6 +493,13 @@ void listarUtilizadorSimples(Utilizador* inicio, int codigo, float* saldo)
 	printf("==============================================\n");
 }
 
+///
+///	Função para listar os dados de uma lista de meios
+///	Recebe a lista de meios, um int para verificar se o utilizador é gestor e outro para a escolha do utilizador, e uma string para filtrar a localização 
+///	Imprime a estrutura da lista de acordo com o tipo de utilizador
+///	Para os gestores vai mostrar os meios todos e para os clientes só mostra os meios que não lê como histórico
+///	Depois verifica a opção do utilizador para que, caso seja 3, só liste os meios na localização especificada
+///
 void listarMeio(Meio* inicio, int gestor, int opcao, char* posicao)
 {
 	if (gestor == 1) {
@@ -467,6 +541,7 @@ void listarMeio(Meio* inicio, int gestor, int opcao, char* posicao)
 	}
 }
 
+/// Imprime os dados correspondentes ao codigo do meio recebido
 void listarMeioSimples(Meio* inicio, int codigo)
 {
 	printf("=====================================================================\n");
@@ -485,6 +560,13 @@ void listarMeioSimples(Meio* inicio, int codigo)
 	printf("=====================================================================\n");
 }
 
+///
+///	Função para listar os dados de uma lista de alugueres
+///	Recebe 3 listas(alugueres, utilizadores e meios), um int para o código do utilizador atual e outro para verificar se é gestor
+///	Imprime a estrutura da lista
+///	Para cada aluguer vai obter o utilizador e meio correspondente
+///	Depois imprime os alugueres todos, caso seja utiizador, ou apenas os do utilizador, caso seja cliente
+///
 void listarAluguer(Aluguer* inicio, Utilizador* utilizadores, Meio* meios, int utilizadorAtual, int gestor)
 {
 	char utilizador[11], tipo[21];
@@ -535,6 +617,7 @@ void listarAluguer(Aluguer* inicio, Utilizador* utilizadores, Meio* meios, int u
 
 #pragma region alterarDados
 
+/// Na lista, passa o utilizador especificado para histórico
 int apagarUtilizador(Utilizador* inicio, int utilizadorApagar) {
 
 	while (inicio != NULL)
@@ -548,6 +631,10 @@ int apagarUtilizador(Utilizador* inicio, int utilizadorApagar) {
 	return (1);
 }
 
+///
+///	Devolve 0 caso o utilizador não tenha saldo suficiente para o aluguer
+///	Se puder realizar a ação, na lista, vai alterar o saldo do utilizador
+///
 int atualizarSaldo(Utilizador* inicio, int codigo, float custo) {
 
 	while (inicio != NULL)
@@ -565,6 +652,7 @@ int atualizarSaldo(Utilizador* inicio, int codigo, float custo) {
 	return (1);
 }
 
+/// Na lista, altera os dados do utilizador especificado, para os novos dados recebidos
 int alterarUtilizador(Utilizador* inicio, int codigo, char* nome, char* password, float saldo, Data dataNascimento, int NIF, char* morada, int gestor)
 {
 	while (inicio != NULL)
@@ -586,9 +674,12 @@ int alterarUtilizador(Utilizador* inicio, int codigo, char* nome, char* password
 	return;
 }
 
+///
+///	Para cada meio, vai verificar se existe algum aluguer ativo com esse meio
+///	Caso se verificar passa o meio para histórico na lista de meios recebida
+///
 int removerMeioAtivo(Meio* inicio, Aluguer* alugueres)
 {
-	//Meio* aux = inicio;
 	Aluguer* auxAlugueres = alugueres;
 	while (inicio != NULL)
 	{
@@ -601,12 +692,12 @@ int removerMeioAtivo(Meio* inicio, Aluguer* alugueres)
 			}
 			alugueres = alugueres->seguinte;
 		}
-		//aux = aux->seguinte;
 		inicio = inicio->seguinte;
 	}
 	return (1);
 }
 
+/// Na lista, passa o meio especificado para histórico
 void apagarMeio(Meio* inicio, int meioApagar)
 {
 	while (inicio != NULL)
@@ -620,6 +711,7 @@ void apagarMeio(Meio* inicio, int meioApagar)
 	return;
 }
 
+/// Na lista, altera os dados do meio especificado, para os novos dados recebidos
 int alterarMeio(Meio* inicio, int codigo, char* tipo, Estado estado, float preco)
 {
 	while (inicio != NULL)
@@ -638,6 +730,7 @@ int alterarMeio(Meio* inicio, int codigo, char* tipo, Estado estado, float preco
 	return;
 }
 
+/// Na lista, passa o aluguer especificado para não ativo
 int terminarAluguer(Aluguer* inicio, int codigo) {
 	while (inicio != NULL)
 	{
@@ -654,6 +747,7 @@ int terminarAluguer(Aluguer* inicio, int codigo) {
 
 #pragma region adicionarDadosDocumentos
 
+/// Adiciona os dados do utilizador da lista recebida no fim do documento
 int adicionarUtilizadores(Utilizador* inicio)
 {
 	FILE* fp;
@@ -674,6 +768,7 @@ int adicionarUtilizadores(Utilizador* inicio)
 	else return(0);
 }
 
+/// Adiciona os dados do meio da lista recebida no fim do documento
 int adicionarMeios(Meio* inicio)
 {
 	FILE* fp;
@@ -692,6 +787,7 @@ int adicionarMeios(Meio* inicio)
 	else return(0);
 }
 
+/// Adiciona os dados do aluguer da lista recebida no fim do documento
 int adicionarAlugueres(Aluguer* inicio)
 {
 	FILE* fp;
@@ -714,6 +810,7 @@ int adicionarAlugueres(Aluguer* inicio)
 
 #pragma region guardarDadosDocumentos
 
+/// Escreve os dados do utilizador da lista recebida no documento
 int guardarUtilizadores(Utilizador* inicio)
 {
 	FILE* fp;
@@ -734,6 +831,7 @@ int guardarUtilizadores(Utilizador* inicio)
 	else return(0);
 }
 
+/// Escreve os dados do meio da lista recebida no documento
 int guardarMeios(Meio* inicio)
 {
 	FILE* fp;
@@ -752,6 +850,7 @@ int guardarMeios(Meio* inicio)
 	else return(0);
 }
 
+/// Escreve os dados do aluguer da lista recebida no documento
 int guardarAlugueres(Aluguer* inicio)
 {
 	FILE* fp;
@@ -774,6 +873,7 @@ int guardarAlugueres(Aluguer* inicio)
 
 #pragma region existeDados
 
+/// Verifica se, na lista, existe um utilizador com o código igual ao código recebido
 int existeUtilizador(Utilizador* inicio, int codigo)
 {
 	while (inicio != NULL)
@@ -784,6 +884,7 @@ int existeUtilizador(Utilizador* inicio, int codigo)
 	return(0);
 }
 
+/// Verifica se, na lista, existe um utilizador com o código igual ao código recebido e que esteja ativo
 int existeUtilizadorAtivo(Utilizador* inicio, int codigo)
 {
 	while (inicio != NULL)
@@ -794,6 +895,7 @@ int existeUtilizadorAtivo(Utilizador* inicio, int codigo)
 	return(0);
 }
 
+/// Verifica se, na lista, existe um utilizador com o 'username' igual ao 'username' recebido
 int existeUser(Utilizador* inicio, char* utilizador)
 {
 	while (inicio != NULL)
@@ -804,6 +906,7 @@ int existeUser(Utilizador* inicio, char* utilizador)
 	return(0);
 }
 
+/// Verifica se, na lista, existe um meio com o código igual ao código recebido
 int existeMeio(Meio* inicio, int codigo)
 {
 	while (inicio != NULL)
@@ -814,6 +917,7 @@ int existeMeio(Meio* inicio, int codigo)
 	return(0);
 }
 
+/// Verifica se, na lista, existe um aluguer com o código igual ao código recebido
 int existeAluguer(Aluguer* inicio, int codigo)
 {
 	while (inicio != NULL)
@@ -824,6 +928,7 @@ int existeAluguer(Aluguer* inicio, int codigo)
 	return(0);
 }
 
+/// Verifica se, na lista, existe um aluguer ativo com o código de meio igual ao código recebido
 int existeAluguerMeio(Aluguer* inicio, int codigo)
 {
 	while (inicio != NULL)
@@ -834,6 +939,7 @@ int existeAluguerMeio(Aluguer* inicio, int codigo)
 	return(0);
 }
 
+/// Verifica se, na lista, existe um aluguer ativo com o código de utilizador igual ao código recebido e altera o valor guardado no codigo de aluguer
 int existeAluguerAtivo(Aluguer* inicio, int codigo, int* codigoAluguer)
 {
 	while (inicio != NULL)
@@ -852,7 +958,7 @@ int existeAluguerAtivo(Aluguer* inicio, int codigo, int* codigoAluguer)
 
 #pragma region obterUltimoCodigo
 
-
+/// Passa por todos os utilizadores e devolve o código mais alto, devolvendo 0 se a lista estiver vazia
 int obterUltimoUtilizador(Utilizador* inicio) {
 	int i = 0;
 	while (inicio != NULL) {
@@ -864,6 +970,7 @@ int obterUltimoUtilizador(Utilizador* inicio) {
 	return (i);
 }
 
+/// Passa por todos os meios e devolve o código mais alto, devolvendo 0 se a lista estiver vazia
 int obterUltimoMeio(Meio* inicio) {
 	int i = 0;
 	while (inicio != NULL) {
@@ -875,6 +982,7 @@ int obterUltimoMeio(Meio* inicio) {
 	return (i);
 }
 
+/// Passa por todos os alugueres e devolve o código mais alto, devolvendo 0 se a lista estiver vazia
 int obterUltimoAluguer(Aluguer* inicio) {
 	int i = 0;
 	while (inicio != NULL) {
@@ -892,6 +1000,13 @@ int obterUltimoAluguer(Aluguer* inicio) {
 
 #pragma region opcoesGestor
 
+///
+///	Função da 1a opção do menu de gestores
+///	Recebe uma lista vazia e os dados introduzidos pelo utilizador
+///	Carrega os utilizadores através dos documentos
+///	Passa a lista e os dados para a função 'alterarUtilizador'
+///	Depois de alterar os dados vai ordenar a lista por código e tenta guardar a lista ordenada no documento
+///
 int mG1(Utilizador* utilizadores, int codigo, char* nome, char* password, float saldo, Data dataNascimento, int NIF, char* morada, int gestor) {
 	utilizadores = lerUtilizadores(utilizadores);
 	alterarUtilizador(utilizadores, codigo, nome, password, saldo, dataNascimento, NIF, morada, gestor);
@@ -900,6 +1015,10 @@ int mG1(Utilizador* utilizadores, int codigo, char* nome, char* password, float 
 	return resp;
 }
 
+///
+///	Função para listar os meios de acordo com a opção escolhida pelo utilizador
+///	Carrega os dados dos meios e ordena de acordo com a opção e depois lista os meios
+///
 int mG2(Meio* meios, int opcao, char* posicao) {
 	meios = lerMeios();
 	switch (opcao)
@@ -921,6 +1040,11 @@ int mG2(Meio* meios, int opcao, char* posicao) {
 	return 1;
 }
 
+///
+///	Função para a 3a opção do menu de gestores
+///	Recebe uma lista dos meios vazia e os dados introduidos pelo utilizador para o novo meio
+///	Carrega um meio com os novos dados e passa para a função 'adicionarMeios'
+///
 int mG3(Meio* meios, int codigo, char* tipo, Estado estado, float preco) {
 	meios = carregarMeio(meios, codigo, tipo, estado, preco, 0);
 
@@ -931,6 +1055,11 @@ int mG3(Meio* meios, int codigo, char* tipo, Estado estado, float preco) {
 	return resp;
 }
 
+///
+///	Carrega os meios para uma lista vazia
+///	Altera os dados do meio escolhido pelo utilizador através da função 'alterarMeio'
+///	Ordena a lista dos meios e tenta guardar os dados no documento
+///
 int mG4(Meio* meios, int codigo, char* tipo, Estado estado, float preco) {
 	meios = lerMeios(meios);
 	alterarMeio(meios, codigo, tipo, estado, preco);
@@ -939,6 +1068,11 @@ int mG4(Meio* meios, int codigo, char* tipo, Estado estado, float preco) {
 	return resp;
 }
 
+///
+///	Função para "apagar" meio
+///	Carrega os meios para uma lista e verifica se o meio existe
+///	Se se verificar passa o meio para histórico, ordena a lista e tenta guardar os dados da lista no documento
+///
 int mG5(Meio* meios, int codigo) {
 	int resp = 0;
 	meios = lerMeios(meios);
@@ -953,6 +1087,10 @@ int mG5(Meio* meios, int codigo) {
 	return resp;
 }
 
+///
+///	Função para listar os utilizadores
+///	Carrega os dados dos utilizadores e ordena por código e depois lista os utilizadores
+///
 int mG6(Utilizador* utilizadores) {
 	utilizadores = lerUtilizadores();
 	ordenarUtilizadores(utilizadores);
@@ -963,6 +1101,11 @@ int mG6(Utilizador* utilizadores) {
 	return 1;
 }
 
+///
+///	Função para a 7a opção do menu de gestores
+///	Recebe uma lista dos utilizadore vazia e os dados introduidos pelo utilizador para o novo utilizador
+///	Carrega um utilizador com os novos dados e passa para a função 'adicionarUtilizadores'
+///
 int mG7(Utilizador* utilizadores, int codigo, char* utilizador, char* nome, char* password, float saldo, Data dataNascimento, int NIF, char* morada, int gestor) {
 	
 	utilizadores = carregarUtilizador(utilizadores, codigo, utilizador, nome, password, saldo, dataNascimento, NIF, morada, gestor, 0);
@@ -974,6 +1117,11 @@ int mG7(Utilizador* utilizadores, int codigo, char* utilizador, char* nome, char
 	return resp;
 }
 
+///
+///	Carrega os utilizadores para uma lista vazia
+///	Altera os dados do utilizador escolhido pelo utilizador atual através da função 'alterarUtilizador'
+///	Ordena a lista dos utilizadores e tenta guardar os dados no documento
+///
 int mG8(Utilizador* utilizadores, int codigo, char* nome, char* password, float saldo, Data dataNascimento, int NIF, char* morada, int gestor) {
 	utilizadores = lerUtilizadores(utilizadores);
 	alterarUtilizador(utilizadores, codigo, nome, password, saldo, dataNascimento, NIF, morada, gestor);
@@ -982,6 +1130,11 @@ int mG8(Utilizador* utilizadores, int codigo, char* nome, char* password, float 
 	return resp;
 }
 
+///
+///	Função para "apagar" um utilizador
+///	Carrega os utilizadores para uma lista e verifica se o utilizador existe
+///	Se se verificar passa o utilizador para histórico, ordena a lista e tenta guardar os dados da lista no documento
+///
 int mG9(Utilizador* utilizadores, int codigo) {
 	int resp = 0;
 	utilizadores = lerUtilizadores(utilizadores);
@@ -996,6 +1149,10 @@ int mG9(Utilizador* utilizadores, int codigo) {
 	return resp;
 }
 
+///
+///	Função para listar os alugueres
+///	Carrega os dados dos alugueres, utilizadores e meos, ordena por os alugueres por código e depois lista os alugueres com alguns dados das outras listas
+///
 int mG10(Utilizador* utilizadores, Aluguer* alugueres, Meio* meios, int utilizadorAtual) {
 	meios = lerMeios();
 	utilizadores = lerUtilizadores();
@@ -1018,6 +1175,13 @@ int mG10(Utilizador* utilizadores, Aluguer* alugueres, Meio* meios, int utilizad
 
 #pragma region opcoesCliente
 
+///
+///	Função da 1a opção do menu de clientes
+///	Recebe uma lista vazia e os dados introduzidos pelo utilizador
+///	Carrega os utilizadores através dos documentos
+///	Passa a lista e os dados para a função 'alterarUtilizador'
+///	Depois de alterar os dados vai ordenar a lista por código e tenta guardar a lista ordenada no documento
+///
 int m1(Utilizador* utilizadores, int codigo, char* nome, char* password, float saldo, Data dataNascimento, int NIF, char* morada, int gestor) {
 	utilizadores = lerUtilizadores(utilizadores);
 	alterarUtilizador(utilizadores, codigo, nome, password, saldo, dataNascimento, NIF, morada, gestor);
@@ -1026,6 +1190,11 @@ int m1(Utilizador* utilizadores, int codigo, char* nome, char* password, float s
 	return resp;
 }
 
+///
+///	Função para listar os meios disponíveis de acordo com a opção escolhida pelo utilizador
+///	Carrega os dados dos meios e dos alugueres e envia as listas para a função 'removerMeioAtivo'
+///	Ordena os meios de acordo com a opção e depois lista os meios disponíveis
+///
 int m2(Aluguer* alugueres, Meio* meios, int opcao, char* posicao) {
 	alugueres = lerAlugueres();
 	meios = lerMeios();
@@ -1054,6 +1223,12 @@ int m2(Aluguer* alugueres, Meio* meios, int opcao, char* posicao) {
 	return 1;
 }
 
+///
+///	Função para alugar um meio
+///	Recebe a lista dos alugueres e os dados introduzidos pelo utilizador
+///	Carrega os utilizadores e verifica se posde alugar o meio
+///	Se o puder realizar, atualiza o saldo e cria o aluguer
+///
 int m3(Utilizador* utilizadores, Aluguer* alugueres, int codigo, int codigoUtilizador, int codigoMeio, float custo) {
 	int resp = 0;
 	// Verificar se o saldo permite o aluguer e remover o custo do saldo.
@@ -1073,15 +1248,21 @@ int m3(Utilizador* utilizadores, Aluguer* alugueres, int codigo, int codigoUtili
 	return resp;
 }
 
+/// Recebe a lista com os alugueres e o código do utilizador, executa a função 'terminarAluguer', ordena a lista e tenta guardar a lista ordenada no documento
 int m4(Aluguer* alugueres, int codigo) {
 	int resp = 0;
 	terminarAluguer(alugueres, codigo);
 
+	ordenarAlugueres(alugueres);
 	resp = guardarAlugueres(alugueres);
 
 	return resp;
 }
 
+///
+///	Função para mostrar os alugueres realizados pelo utilizador
+///	Carrega os dados para as listas correspondentes, e depois lista os alugueres do utilizador da sessão
+///
 int m5(Utilizador* utilizadores, Aluguer* alugueres, Meio* meios, int utilizadorAtual) {
 	meios = lerMeios();
 	utilizadores = lerUtilizadores();
