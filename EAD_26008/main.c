@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+//#include <time.h>
 #include "secondary.h"
 
 /// Pede dados de login ao utilizador, 
@@ -66,4 +67,8 @@ main() {
 			escolherMenu(utilizadorAtual, nomeAtual, gestor);
 		}
 	}
+	int tNew = time(NULL);
+	int tPrev = 1681729980;
+
+	int minutos = (tNew - tPrev) / 60;
 }

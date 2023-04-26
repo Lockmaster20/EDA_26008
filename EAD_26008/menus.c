@@ -20,7 +20,7 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 	//Dados introduzidos pelo utilizador
 	int opcao, opcaoList, codigo, NIF, gestor, historico, resp;
 	char utilizador[11], nome[41], password[11], morada[31], tipo[21], posicao[57];
-	float saldo, preco;
+	float saldo, precoBase, precoAdicional;
 	Data dataNascimento;
 	Estado estado;
 
@@ -138,12 +138,16 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 			scanf("%[^\n]56s", &estado.posicao.palavras);
 			getchar();
 
-			printf("Preco:\n");
-			scanf("%f", &preco);
+			printf("Preco Base:\n");
+			scanf("%f", &precoBase);
+			getchar();
+
+			printf("Preco por minuto:\n");
+			scanf("%f", &precoAdicional);
 			getchar();
 
 			system("cls");
-			resp = mG3(meios, codigo, tipo, estado, preco);
+			resp = mG3(meios, codigo, tipo, estado, precoBase, precoAdicional);
 			if (resp == 1)
 				printf("\n--- Meio adicionado com sucesso ---\n\n");
 			else
@@ -185,12 +189,16 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 			scanf("%[^\n]56s", &estado.posicao.palavras);
 			getchar();
 
-			printf("Preco:\n");
-			scanf("%f", &preco);
+			printf("Preco Base:\n");
+			scanf("%f", &precoBase);
+			getchar();
+
+			printf("Preco por minuto:\n");
+			scanf("%f", &precoAdicional);
 			getchar();
 
 			system("cls");
-			resp = mG4(meios, codigo, tipo, estado, preco);
+			resp = mG4(meios, codigo, tipo, estado, precoBase, precoAdicional);
 			freeMeio(meios);
 			if (resp == 1)
 				printf("\n--- Meio alterado com sucesso ---\n\n");
@@ -446,7 +454,6 @@ int menu(int utilizadorAtual, char* nomeAtual) {
 			else
 				printf("\n--- Erro ao alterar o utilizador ---\n\n");
 			break;
-			break;
 		case 2:
 			existe = 1;
 			while (existe)
@@ -504,23 +511,20 @@ int menu(int utilizadorAtual, char* nomeAtual) {
 					}
 				}
 
-				/// !!! Opção temporária, depois calcular o custo pelo preço do meio
-				printf("Custo:\n");
-				scanf("%f", &custo);
-				getchar();
+				freeAluguer(alugueres);
+				alugueres = NULL;
 
-				resp = m3(utilizadores, alugueres, codigo, utilizadorAtual, codigoMeio, custo);
+				resp = m3(utilizadores, alugueres, codigo, utilizadorAtual, codigoMeio);
 				if (resp == 1)
 					printf("\n--- Meio alugado com sucesso ---\n\n");
 				else
 					printf("\n--- Erro ao alugar o meio ---\n\n");
 			}
 			else {
+				freeAluguer(alugueres);
+				alugueres = NULL;
 				printf("\n--- Nao pode alugar outro meio enquanto tiver um aluguer ativo ---\n\n");
 			}
-
-			freeAluguer(alugueres);
-			alugueres = NULL;
 			break;
 		case 4:
 			system("cls");
@@ -528,11 +532,15 @@ int menu(int utilizadorAtual, char* nomeAtual) {
 			existe = existeAluguerAtivo(alugueres, utilizadorAtual, &codigoAluguer);
 			if (existe) {
 
-				resp = m4(alugueres, codigoAluguer);
+				meios = lerMeios();
+				resp = m4(alugueres, meios, codigoAluguer);
 				if (resp == 1)
 					printf("\n--- Aluguer terminado com sucesso ---\n\n");
 				else
 					printf("\n--- Erro ao terminar o aluguer ---\n\n");
+
+				freeMeio(meios);
+				meios = NULL;
 			}
 			else
 			{

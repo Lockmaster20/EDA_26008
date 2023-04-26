@@ -21,11 +21,16 @@ typedef struct registoEstado {
 	Posicao posicao;
 } Estado;
 
+typedef struct registoPreco {
+	float precoBase;
+	float precoAdicional;			// preco por minuto
+} Preco;
+
 typedef struct registoMeio {
 	int codigo;
 	char tipo[21];
 	Estado estado;
-	float preco;					// preco por minuto
+	Preco preco;
 	int historico;
 	struct registoMeio* seguinte;	// endereço de memória para uma struct
 } Meio;
@@ -49,7 +54,7 @@ typedef struct registoAluguer {
 	int codigo;
 	int codigoUtilizador;
 	int codigoMeio;
-	//Data dataInicio, dataFim;
+	int dataInicio, dataFim;
 	//Estado estadoInicial, estadoFinal;
 	int ativo;
 	float custo;					// preço total do aluguer
@@ -116,9 +121,9 @@ int mG1(Utilizador* utilizadores, int codigo, char* nome, char* password, float 
 
 int mG2(Meio* meios, int opcao, char* posicao);
 
-int mG3(Meio* meios, int codigo, char* tipo, Estado estado, float preco);
+int mG3(Meio* meios, int codigo, char* tipo, Estado estado, float precoBase, float precoAdicional);
 
-int mG4(Meio* meios, int codigo, char* tipo, Estado estado, float preco);
+int mG4(Meio* meios, int codigo, char* tipo, Estado estado, float precoBase, float precoAdicional);
 
 int mG5(Meio* meios, int codigo);
 
@@ -140,9 +145,9 @@ int m1(Utilizador* utilizadores, int codigo, char* nome, char* password, float s
 
 int m2(Aluguer* alugueres, Meio* meios, int opcao, char* posicao);
 
-int m3(Utilizador* utilizadores, Aluguer* alugueres, int codigo, int codigoUtilizador, int codigoMeio, float custo);
+int m3(Utilizador* utilizadores, Aluguer* alugueres, int codigo, int codigoUtilizador, int codigoMeio);
 
-int m4(Aluguer* alugueres, int codigo);
+int m4(Aluguer* alugueres, Meio* meios, int codigo);
 
 int m5(Utilizador* utilizadores, Aluguer* alugueres, Meio* meios, int utilizadorAtual);
 
