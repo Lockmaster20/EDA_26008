@@ -147,7 +147,7 @@ int m2(Aluguer* alugueres, Meio* meios, int opcao, char* posicao);
 
 int m3(Utilizador* utilizadores, Aluguer* alugueres, int codigo, int codigoUtilizador, int codigoMeio);
 
-int m4(Aluguer* alugueres, Meio* meios, int codigo);
+int m4(Utilizador* utilizadores, Aluguer* alugueres, Meio* meios, int codigo);
 
 int m5(Utilizador* utilizadores, Aluguer* alugueres, Meio* meios, int utilizadorAtual);
 

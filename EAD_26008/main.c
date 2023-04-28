@@ -1,8 +1,8 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
+#include <time.h>
 #include <stdlib.h>
 #include <string.h>
-//#include <time.h>
 #include "secondary.h"
 
 /// Pede dados de login ao utilizador, 
@@ -67,8 +67,16 @@ main() {
 			escolherMenu(utilizadorAtual, nomeAtual, gestor);
 		}
 	}
-	int tNew = time(NULL);
+	/*int tNew = 0;
 	int tPrev = 1681729980;
+	int i = 0, minutos= 0;
 
-	int minutos = (tNew - tPrev) / 60;
+	while (i < 100) {
+		Sleep(1000);
+		tNew = time(NULL);
+		minutos = (tNew - tPrev) / 60;
+		printf("%d - %d\n", i, minutos);
+		i++;
+	}*/
+
 }

@@ -1,5 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
+#include <time.h>
 #include <stdlib.h>
 #include <string.h>
 #include "secondary.h"
@@ -221,18 +222,24 @@ void trocarAlugueres(Aluguer* inicio, Aluguer* seg) {
 	aux.codigo = inicio->codigo;
 	aux.codigoUtilizador = inicio->codigoUtilizador;
 	aux.codigoMeio = inicio->codigoMeio;
+	aux.dataInicio = inicio->dataInicio;
+	aux.dataFim = inicio->dataFim;
 	aux.ativo = inicio->ativo;
 	aux.custo = inicio->custo;
 
 	inicio->codigo = seg->codigo;
 	inicio->codigoUtilizador = seg->codigoUtilizador;
 	inicio->codigoMeio = seg->codigoMeio;
+	inicio->dataInicio = seg->dataInicio;
+	inicio->dataFim = seg->dataFim;
 	inicio->ativo = seg->ativo;
 	inicio->custo = seg->custo;
 
 	seg->codigo = aux.codigo;
 	seg->codigoUtilizador = aux.codigoUtilizador;
 	seg->codigoMeio = aux.codigoMeio;
+	seg->dataInicio = aux.dataInicio;
+	seg->dataFim = aux.dataFim;
 	seg->ativo = aux.ativo;
 	seg->custo = aux.custo;
 
@@ -638,25 +645,38 @@ int apagarUtilizador(Utilizador* inicio, int utilizadorApagar) {
 	return (1);
 }
 
-///
-///	Devolve 0 caso o utilizador não tenha saldo suficiente para o aluguer
-///	Se puder realizar a ação, na lista, vai alterar o saldo do utilizador
-///
+///	Na lista, vai alterar o saldo do utilizador
 int atualizarSaldo(Utilizador* inicio, int codigo, float custo) {
 
 	while (inicio != NULL)
 	{
-		if ((inicio->codigo == codigo) && (inicio->saldo < custo)) {
-			return (0);
-		}
-		else if ((inicio->codigo == codigo))
+		if ((inicio->codigo == codigo))
 		{
 			inicio->saldo = (inicio->saldo - custo);
 			return (1);
 		}
 		inicio = inicio->seguinte;
 	}
-	return (1);
+	return (0);
+}
+
+float calcularCusto(Meio* inicio, int codigo, int minutos) {
+	float custo = 0;
+	float tst1, tst2, tst3, tst4;
+	while (inicio != NULL)
+	{
+		if ((inicio->codigo == codigo)) {
+			//custo = inicio->preco.precoBase + (inicio->preco.precoAdicional * (float)minutos);
+			tst1 = inicio->preco.precoBase;
+			tst2 = inicio->preco.precoAdicional;
+			tst3 = (float)minutos;
+			tst4 = tst2 * tst3;
+			custo = tst1 + tst4;
+			return custo;
+		}
+		inicio = inicio->seguinte;
+	}
+	return custo;
 }
 
 /// Na lista, altera os dados do utilizador especificado, para os novos dados recebidos
@@ -738,10 +758,9 @@ int alterarMeio(Meio* inicio, int codigo, char* tipo, Estado estado, float preco
 	return;
 }
 
-float calcularCusto(Meio* inicio, int codigo, int minutos);
-
 /// Na lista, passa o aluguer especificado para não ativo
-int terminarAluguer(Aluguer* inicio, Meio* meios, int codigo) {
+int terminarAluguer(Utilizador* utilizadores, Aluguer* inicio, Meio* meios, int codigo) {
+	int resp = 0;
 	while (inicio != NULL)
 	{
 		if ((inicio->codigo == codigo)) {
@@ -753,27 +772,17 @@ int terminarAluguer(Aluguer* inicio, Meio* meios, int codigo) {
 			inicio->dataFim = dataFim;
 			inicio->ativo = 0;
 			inicio->custo = custo;
-			//atualizarSaldo
 
-			return;
+			atualizarSaldo(utilizadores, inicio->codigoUtilizador, custo);
+			ordenarUtilizadores(utilizadores);
+			resp = guardarUtilizadores(utilizadores);
+
+			return resp;
 		}
 
 		inicio = inicio->seguinte;
 	}
-	return;
-}
-float calcularCusto(Meio* inicio, int codigo, int minutos) {
-	float custo = 0;
-	while (inicio != NULL)
-	{
-		if ((inicio->codigo == codigo)) {
-			custo = inicio->preco.precoBase + (inicio->preco.precoAdicional * minutos);
-
-			return custo;
-		}
-		inicio = inicio->seguinte;
-	}
-	return custo;
+	return resp;
 }
 
 #pragma endregion
@@ -1291,15 +1300,17 @@ int m3(Utilizador* utilizadores, Aluguer* alugueres, int codigo, int codigoUtili
 
 // !!!!!!!!!!!!!!!! Atualizar descrição
 /// Recebe a lista com os alugueres e o código do utilizador, executa a função 'terminarAluguer', ordena a lista e tenta guardar a lista ordenada no documento
-int m4(Aluguer* alugueres, Meio* meios, int codigo) {
-	int resp = 0;
+int m4(Utilizador* utilizadores, Aluguer* alugueres, Meio* meios, int codigo) {
+	int resA = 0, respB = 0;
 
-	terminarAluguer(alugueres, meios, codigo);
+	int respA = terminarAluguer(utilizadores, alugueres, meios, codigo);
+	if (!respA)
+		return respA;
 
 	ordenarAlugueres(alugueres);
-	resp = guardarAlugueres(alugueres);
+	respB = guardarAlugueres(alugueres);
 
-	return resp;
+	return respB;
 }
 
 ///

@@ -500,7 +500,7 @@ int menu(int utilizadorAtual, char* nomeAtual) {
 					getchar();
 
 					meios = lerMeios();
-					existe = (existeMeio(meios, codigo) && existeAluguerMeio(alugueres, codigo));
+					existe = (existeMeio(meios, codigoMeio) && existeAluguerMeio(alugueres, codigoMeio));
 
 					freeMeio(meios);
 					meios = NULL;
@@ -532,13 +532,16 @@ int menu(int utilizadorAtual, char* nomeAtual) {
 			existe = existeAluguerAtivo(alugueres, utilizadorAtual, &codigoAluguer);
 			if (existe) {
 
+				utilizadores = lerUtilizadores();
 				meios = lerMeios();
-				resp = m4(alugueres, meios, codigoAluguer);
+				resp = m4(utilizadores, alugueres, meios, codigoAluguer);
 				if (resp == 1)
 					printf("\n--- Aluguer terminado com sucesso ---\n\n");
 				else
 					printf("\n--- Erro ao terminar o aluguer ---\n\n");
 
+				freeUtilizador(utilizadores);
+				utilizadores = NULL;
 				freeMeio(meios);
 				meios = NULL;
 			}
