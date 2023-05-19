@@ -1,6 +1,10 @@
 #include <stdio.h>
 
-#define LOC_SIZE 57	//Tamanho máximo das 3 palavras + pontos a separar
+#define LOC_SIZE 57	// Tamanho máximo das 3 palavras + pontos a separar
+#define INF INT_MAX // Define infinito como o valor mais alto possível de int
+
+// !!!!!!!!!!!!!!!!
+//int shortestPath(Grafo* graph, int src, int dest, int V);
 
 #pragma region structs
 
@@ -85,7 +89,6 @@ typedef struct registoDistancia
 	int distancia;
 	struct registoDistancia* seguinte;
 } Distancia;
-
 
 #pragma endregion
 

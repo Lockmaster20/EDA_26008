@@ -504,7 +504,7 @@ Grafo* lerLocais()
 	char local[57];
 
 	Grafo* aux = NULL;
-	fp = fopen("dados/locaisI.txt", "r");
+	fp = fopen("dados/locais.txt", "r");
 	if (fp != NULL)
 	{
 		while (!feof(fp))
@@ -530,7 +530,7 @@ int lerCaminhos(Grafo* grafo) {
 
 	int origem, destino, distancia;
 
-	fp = fopen("dados/caminhosI.txt", "r");
+	fp = fopen("dados/caminhos.txt", "r");
 	if (fp != NULL)
 	{
 		while (!feof(fp))

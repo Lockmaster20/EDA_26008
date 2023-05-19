@@ -133,10 +133,10 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="dados\alugueres.txt" />
+    <Text Include="dados\caminhos_old.txt" />
     <Text Include="dados\caminhos.txt" />
-    <Text Include="dados\caminhosI.txt" />
+    <Text Include="dados\locais_old.txt" />
     <Text Include="dados\locais.txt" />
-    <Text Include="dados\locaisI.txt" />
     <Text Include="dados\meios.txt" />
     <Text Include="dados\utilizadores.txt" />
   </ItemGroup>
