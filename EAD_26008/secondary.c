@@ -343,6 +343,41 @@ Aluguer* carregarAluguer(Aluguer* inicio, int codigo, int codigoUtilizador, int 
 	}
 }
 
+/// Insere um novo registo na lista dos locais
+Grafo* carregarLocal(Grafo* inicio, int codLocal, char* local) {
+
+	Grafo* novo = malloc(sizeof(struct registoGrafo));
+
+	if (novo != NULL)
+	{
+		novo->codigoLocal_h = codLocal;
+		strcpy(novo->local, local);
+
+		novo->seguinte = inicio;
+		return(novo);
+	}
+}
+
+int carregarCaminho(Grafo* inicio, int origem, int destino, int distancia) {
+	Caminho novo;
+	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	//if (existeVertice(inicio, origem) && existeVertice(inicio, destino))
+	//{
+		while (inicio->codigoLocal_h != origem) inicio = inicio->seguinte;
+		novo = malloc(sizeof(struct registoCaminhos));
+		if (novo != NULL)
+		{
+			novo->codigoLocal = destino;
+			novo->distancia = distancia;
+			novo->seguinte = inicio->caminhos;
+			inicio->caminhos = novo;
+			return(1);
+		}
+		else return(0);
+	//}
+	//else return(0);
+}
+
 #pragma endregion
 
 #pragma region lerDocumentos
@@ -454,6 +489,66 @@ Aluguer* lerAlugueres()
 		fclose(fp);
 	}
 	return(aux);
+}
+
+///
+///	Função para ler os dados do ficheiro 'locais.txt'
+///	Para cada linha lê os dados e verifica se tem o número certo de dados
+///	Se se verificar envia os dados para a função 'carregarLocal'
+///
+Grafo* lerLocais()
+{
+	FILE* fp;
+
+	int codLocal;
+	char local[57];
+
+	Grafo* aux = NULL;
+	fp = fopen("dados/locaisI.txt", "r");
+	if (fp != NULL)
+	{
+		while (!feof(fp))
+		{
+			int check = fscanf(fp, "%d;%s\n", &codLocal, local);
+
+			if (check != 2) {
+				printf("\n\n\nErro a carregar dados dos locais\n\n\n");
+				return NULL;
+			}
+			else {
+				aux = carregarLocal(aux, codLocal, local);
+			}
+		}
+		fclose(fp);
+	}
+	return(aux);
+}
+
+/// Na lista, passa o utilizador especificado para histórico
+int lerCaminhos(Grafo* grafo) {
+	FILE* fp;
+
+	int origem, destino, distancia;
+
+	fp = fopen("dados/caminhosI.txt", "r");
+	if (fp != NULL)
+	{
+		while (!feof(fp))
+		{
+			int check = fscanf(fp, "%d;%d;%d\n",
+				&origem, &destino, &distancia);
+
+			if (check != 3) {
+				printf("\n\n\nErro a carregar dados dos caminhos\n\n\n");
+				return 0;
+			}
+			else {
+				carregarCaminho(grafo, origem, destino, distancia);
+			}
+		}
+		fclose(fp);
+	}
+	return(1);
 }
 
 #pragma endregion
@@ -1002,6 +1097,19 @@ int existeAluguerAtivo(Aluguer* inicio, int codigo, int* codigoAluguer)
 				*codigoAluguer = inicio->codigo;
 			return(1);
 		} 
+		inicio = inicio->seguinte;
+	}
+	return(0);
+}
+
+/// Verifica se, na lista, existe um local igual ao introduzido
+int existeLocal(Grafo* inicio, char* local)
+{
+	while (inicio != NULL)
+	{
+		if (!strcmp(inicio->local, local)) {
+			return(1);
+		}
 		inicio = inicio->seguinte;
 	}
 	return(0);

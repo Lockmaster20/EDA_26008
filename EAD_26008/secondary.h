@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+#define LOC_SIZE 57	//Tamanho máximo das 3 palavras + pontos a separar
+
 #pragma region structs
 
 typedef struct registoData {
@@ -7,7 +9,7 @@ typedef struct registoData {
 } Data;
 
 typedef struct registoPosicao {
-	char palavras[57];
+	char palavras[LOC_SIZE];
 } Posicao;
 
 typedef struct registoContacto {
@@ -61,6 +63,30 @@ typedef struct registoAluguer {
 	struct registoAluguer* seguinte;
 } Aluguer;
 
+typedef struct registoCaminhos
+{
+	int codigoLocal;
+	int distancia;
+	struct registoCaminhos* seguinte;
+} *Caminho;
+
+typedef struct registoGrafo
+{
+	int codigoLocal_h;
+	char local[LOC_SIZE];
+	Caminho caminhos;
+	struct registoGrafo* seguinte;
+} Grafo;
+
+typedef struct registoDistancia
+{
+	int codigoLocal;
+	char local[LOC_SIZE];
+	int distancia;
+	struct registoDistancia* seguinte;
+} Distancia;
+
+
 #pragma endregion
 
 #pragma region libertarMemoria
@@ -81,6 +107,10 @@ Meio* lerMeios();
 
 Aluguer* lerAlugueres();
 
+Grafo* lerLocais(); 
+
+int lerCaminhos(Grafo* grafo);
+
 #pragma endregion
 
 #pragma region listarDados
@@ -100,6 +130,7 @@ int existeMeio(Meio* inicio, int codigo);
 int existeAluguer(Aluguer* inicio, int codigo);
 int existeAluguerMeio(Aluguer* inicio, int codigo);
 int existeAluguerAtivo(Aluguer* inicio, int codigo, int* codigoAluguer);
+int existeLocal(Grafo* inicio, char* local);
 
 #pragma endregion
 

@@ -52,6 +52,7 @@ void login(Utilizador* inicio, int* utilizadorAtual, int* gestor, char* nomeAtua
 /// depois de fazer login liberta a memória utilizada e passa para a função de escolher o menu
 main() {
 
+	/*
 	Utilizador* utilizadores = NULL;
 	// Dados da sessão
 	int utilizadorAtual = 0, gestor = 0;
@@ -67,16 +68,38 @@ main() {
 			escolherMenu(utilizadorAtual, nomeAtual, gestor);
 		}
 	}
-	/*int tNew = 0;
-	int tPrev = 1681729980;
-	int i = 0, minutos= 0;
+	*/
 
-	while (i < 100) {
-		Sleep(1000);
-		tNew = time(NULL);
-		minutos = (tNew - tPrev) / 60;
-		printf("%d - %d\n", i, minutos);
-		i++;
-	}*/
 
+	Grafo* grafo = lerLocais();
+	int teste = lerCaminhos(grafo);
+	int existe = existeLocal(grafo, "tile.research.goggles");
+	int nCaminhos = contaLocais(grafo);
+
+	
+	//int funcionou = dijkstra(grafo, "lisp.rival.gracious", nCaminhos);
+
+	int tstttt = 1;
+
+	Grafo g0 = grafo[0];
+	Grafo g1 = grafo[1];
+
+
+	int abc = 0;
+}
+
+int contaLocais(Grafo* inicio) {
+	int count = 0;
+	while (inicio != NULL)
+	{
+		count++;
+		inicio = inicio->seguinte;
+	}
+	return(count);
+}
+
+int dijkstra(Grafo* grafo, char* origem, int nCaminhos) {
+	Distancia* dist = NULL;
+
+	return 1;
 }

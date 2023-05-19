@@ -29,6 +29,10 @@
     <Text Include="dados\utilizadores.txt" />
     <Text Include="dados\meios.txt" />
     <Text Include="dados\alugueres.txt" />
+    <Text Include="dados\locais.txt" />
+    <Text Include="dados\caminhos.txt" />
+    <Text Include="dados\caminhosI.txt" />
+    <Text Include="dados\locaisI.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="secondary.h">
