@@ -3,6 +3,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include "secondary.h"
 
 ///
@@ -352,6 +353,7 @@ Grafo* carregarLocal(Grafo* inicio, int codLocal, char* local) {
 	{
 		novo->codigoLocal_h = codLocal;
 		strcpy(novo->local, local);
+		novo->caminhos = NULL;
 
 		novo->seguinte = inicio;
 		return(novo);
@@ -1153,6 +1155,111 @@ int obterUltimoAluguer(Aluguer* inicio) {
 		inicio = inicio->seguinte;
 	}
 	return (i);
+}
+
+#pragma endregion
+
+#pragma region calcularDistancia
+
+/// Função para calcular a quantidade de locais do grafo
+int contaLocais(Grafo* inicio) {
+	int count = 0;
+	while (inicio != NULL)
+	{
+		count++;
+		inicio = inicio->seguinte;
+	}
+	return(count);
+}
+
+/// Função para encontar o local com o caminho mais curto entre locais não visitados
+int calcDistanciaMin(int* distLocal, bool* visitLocal, int nLocais) {
+	int min = INF, minIndex;
+
+	///
+	/// Para cada local verifica se já foi visitado e se a distancia é menor do que a armazenada anteriormente,
+	/// se se verificar atualiza a distancia minima e altera o local
+	/// 
+	for (int v = 0; v < nLocais; ++v) {
+		if (!visitLocal[v] && distLocal[v] <= min) {
+			min = distLocal[v];
+			minIndex = v;
+		}
+	}
+	return minIndex;
+}
+
+/// Insere um novo registo na lista das distancias
+Distancia* carregarDistancia(Distancia* inicio, int codLocal, int distancia) {
+	Distancia* novo = malloc(sizeof(struct registoDistancia));
+
+	if (novo != NULL)
+	{
+		novo->codigoLocal = codLocal;
+		novo->distancia = distancia;
+
+		novo->seguinte = inicio;
+		return(novo);
+	}
+}
+
+///
+/// Função para calcular a distancia do local de partida até aos restantes pontos do grafo, 
+/// recebe o grafo, o local de partida e o número total de locais
+/// 
+Distancia* calcularDistancia(Grafo* grafo, int lPartida, int nLocais) {
+
+	// Alocar memória para os arrays de acordo com o número de locais
+	int* distLocal = (int*)malloc(nLocais * sizeof(int));	// Guarda a distancia desde o ponto de partida
+	bool* visitLocal = (bool*)malloc(nLocais * sizeof(bool));	// Guarda se o local já foi "visitado"
+
+	// Para cada local define a distancia como "infinito" e visitado como falso
+	for (int i = 0; i < nLocais; ++i) {
+		distLocal[i] = INF;
+		visitLocal[i] = false;
+	}
+
+	// Altera a distancia do ponto de origem para 0
+	distLocal[lPartida - 1] = 0;
+
+	// Para cada local encontrar o caminho mais curto através do algoritmo de Dijkstra
+	for (int l = 0; l < nLocais; l++) {
+
+		// u = local não visitado com a menor distancia aos locais visitados
+		int u = calcDistanciaMin
+		(distLocal, visitLocal, nLocais);
+		visitLocal[u] = true;
+
+		Grafo* aux = grafo;
+		while (aux->codigoLocal_h - 1 != u) aux = aux->seguinte;
+		Caminho camAtual = aux->caminhos;
+
+		///
+		/// Para cada caminho v desde o local u, verifica se passar pelo ponto u reduz a distancia comparado a um valor armazenado 
+		/// se se verificar, atualiza para o menor valor
+		/// 
+		while (camAtual != NULL) {
+			int v = camAtual->codigoLocal - 1;
+			int distancia = camAtual->distancia;
+
+			if (!visitLocal[v] && distLocal[u] + distancia < distLocal[v]) {
+				distLocal[v] = distLocal[u] + distancia;
+			}
+			camAtual = camAtual->seguinte;
+		}
+	}
+
+	// Guarda numa lista ligada as distancias desde o local de origem para os restantes locais
+	Distancia* dist = NULL;
+	for (int i = 1; i <= nLocais; i++) {
+		dist = carregarDistancia(dist, i, distLocal[i - 1]);
+	}
+
+	// Liberta memória alocada
+	free(distLocal);
+	free(visitLocal);
+
+	return dist;
 }
 
 #pragma endregion
