@@ -97,6 +97,10 @@ void freeMeio(Meio* inicio);
 
 void freeAluguer(Aluguer* inicio);
 
+void freeCaminho(Caminho inicio);
+
+void freeLocais(Grafo* inicio);
+
 #pragma endregion
 
 #pragma region lerDocumentos
@@ -147,7 +151,7 @@ int obterUltimoAluguer(Aluguer* inicio);
 int contaLocais(Grafo* inicio);
 int calcDistanciaMin(int* distLocal, bool* visitLocal, int nLocais);
 Distancia* carregarDistancia(Distancia* inicio, int codLocal, int distancia);
-Distancia* calcularDistancia(Grafo* grafo, int lPartida, int nLocais);
+Distancia* calcularDistancia(Grafo* grafo, int lPartida, int limite, int nLocais);
 
 #pragma endregion
 

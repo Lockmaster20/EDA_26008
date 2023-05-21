@@ -63,6 +63,32 @@ void freeAluguer(Aluguer* inicio) {
 	}
 }
 
+/// Liberta a memória utilizada pela lista de caminhos dos locais
+void freeCaminho(Caminho inicio) {
+	Caminho aux;
+
+	while (inicio != NULL)
+	{
+		aux = inicio;
+		inicio = inicio->seguinte;
+		free(aux);
+	}
+}
+
+/// Liberta a memória utilizada pela lista de locais
+void freeLocais(Grafo* inicio) {
+	Grafo* aux;
+
+	while (inicio != NULL)
+	{
+		aux = inicio;
+		inicio = inicio->seguinte;
+		if (aux->caminhos != NULL) freeCaminho(aux->caminhos);
+
+		free(aux);
+	}
+}
+
 #pragma endregion
 
 #pragma region ordenarDados
@@ -724,6 +750,32 @@ void listarAluguer(Aluguer* inicio, Utilizador* utilizadores, Meio* meios, int u
 	printf("=============================================================================\n");
 }
 
+///
+///	Função para listar os dados de uma lista de locais
+///	Recebe a lista, imprime a estrutura da lista e depois, para cada item da lista imprime os dados
+///
+void listarLocais(Grafo* inicio)
+{
+	printf("===================================================================================================================\n");
+	printf("Codigo | Localizacao                                              | Ligacoes (distancia)\n");
+	printf("=======|==========================================================|================================================\n");
+
+	while (inicio != NULL)
+	{
+		printf("%6d | %-56s | ", inicio->codigoLocal_h, inicio->local);
+		Caminho aux = inicio->caminhos;
+		while (aux != NULL) {
+			printf("%4d (%4d) ", aux->codigoLocal, aux->distancia);
+			aux = aux->seguinte;
+		}
+		printf("\n");
+
+		inicio = inicio->seguinte;
+	}
+	printf("===================================================================================================================\n");
+
+}
+
 #pragma endregion
 
 #pragma region alterarDados
@@ -1206,8 +1258,9 @@ Distancia* carregarDistancia(Distancia* inicio, int codLocal, int distancia) {
 ///
 /// Função para calcular a distancia do local de partida até aos restantes pontos do grafo, 
 /// recebe o grafo, o local de partida e o número total de locais
+/// se os locais estiverem dentro do limite carrega na estrutura de distancias
 /// 
-Distancia* calcularDistancia(Grafo* grafo, int lPartida, int nLocais) {
+Distancia* calcularDistancia(Grafo* grafo, int lPartida, int limite, int nLocais) {
 
 	// Alocar memória para os arrays de acordo com o número de locais
 	int* distLocal = (int*)malloc(nLocais * sizeof(int));	// Guarda a distancia desde o ponto de partida
@@ -1252,7 +1305,8 @@ Distancia* calcularDistancia(Grafo* grafo, int lPartida, int nLocais) {
 	// Guarda numa lista ligada as distancias desde o local de origem para os restantes locais
 	Distancia* dist = NULL;
 	for (int i = 1; i <= nLocais; i++) {
-		dist = carregarDistancia(dist, i, distLocal[i - 1]);
+		if (distLocal[i - 1] <= limite)
+			dist = carregarDistancia(dist, i, distLocal[i - 1]);
 	}
 
 	// Liberta memória alocada
