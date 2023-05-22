@@ -89,6 +89,18 @@ void freeLocais(Grafo* inicio) {
 	}
 }
 
+/// Liberta a memória utilizada pela lista de distancias
+void freeDistancias(Distancia* inicio) {
+	Distancia* aux;
+
+	while (inicio != NULL)
+	{
+		aux = inicio;
+		inicio = inicio->seguinte;
+		free(aux);
+	}
+}
+
 #pragma endregion
 
 #pragma region ordenarDados
@@ -340,7 +352,7 @@ Meio* carregarMeio(Meio* inicio, int codigo, char* tipo, Estado estado, float pr
 		strcpy(novo->tipo, tipo);
 		novo->estado.bateria = estado.bateria;
 		novo->estado.autonomia = estado.autonomia;
-		strcpy(novo->estado.posicao.palavras, estado.posicao.palavras);
+		novo->estado.posicao = estado.posicao;
 		novo->preco.precoBase = precoBase;
 		novo->preco.precoAdicional = precoAdicional;
 		novo->historico = historico;
@@ -466,9 +478,9 @@ Meio* lerMeios()
 	{
 		while (!feof(fp))
 		{
-			int check = fscanf(fp, "%d;%[^;];%f;%f;%[^;];%f;%f;%d\n",
+			int check = fscanf(fp, "%d;%[^;];%f;%f;%d;%f;%f;%d\n",
 				&codigo, tipo, &estado.bateria, &estado.autonomia,
-				&estado.posicao.palavras,
+				&estado.posicao,
 				&precoBase, &precoAdicional, &historico);
 
 			if (check != 8) {
@@ -633,43 +645,43 @@ void listarUtilizadorSimples(Utilizador* inicio, int codigo, float* saldo)
 ///	Para os gestores vai mostrar os meios todos e para os clientes só mostra os meios que não lê como histórico
 ///	Depois verifica a opção do utilizador para que, caso seja 3, só liste os meios na localização especificada
 ///
-void listarMeio(Meio* inicio, int gestor, int opcao, char* posicao)
+void listarMeio(Meio* inicio, int gestor, int opcao, int posicao)
 {
 	if (gestor == 1) {
-		printf("==============================================================================================================================\n");
-		printf("Codigo | Tipo                 | Bateria | Autonomia | Localizacao                                              | Preco | Hist.\n");
-		printf("=======|======================|=========|===========|==========================================================|=======|======\n");
+		printf("=================================================================================\n");
+		printf("Codigo | Tipo                 | Bateria | Autonomia | Localizacao | Preco | Hist.\n");
+		printf("=======|======================|=========|===========|=============|=======|======\n");
 
 		while (inicio != NULL)
 		{
-			if (opcao == 1 || opcao == 2 || ((opcao == 3) && (!strcmp(inicio->estado.posicao.palavras, posicao)))) {
-				printf("%6d | %-20s | %7.2f | %9.2f | %-56s | %5.2f | %-5s\n",
+			if (opcao == 1 || opcao == 2 || ((opcao == 3) && (inicio->estado.posicao == posicao))) {
+				printf("%6d | %-20s | %7.2f | %9.2f | %11d | %5.2f | %-5s\n",
 					inicio->codigo, inicio->tipo, inicio->estado.bateria, inicio->estado.autonomia,
-					inicio->estado.posicao.palavras,
+					inicio->estado.posicao,
 					inicio->preco.precoBase, checkSN(inicio->historico));
 			}
 			inicio = inicio->seguinte;
 		}
-		printf("==============================================================================================================================\n");
+		printf("=================================================================================\n");
 	}
 	else {
-		printf("======================================================================================================================\n");
-		printf("Codigo | Tipo                 | Bateria | Autonomia | Localizacao                                              | Preco\n");
-		printf("=======|======================|=========|===========|==========================================================|======\n");
+		printf("=========================================================================\n");
+		printf("Codigo | Tipo                 | Bateria | Autonomia | Localizacao | Preco\n");
+		printf("=======|======================|=========|===========|=============|======\n");
 
 		while (inicio != NULL)
 		{
 			if (inicio->historico == 0) {
-				if (opcao == 1 || opcao == 2 || ((opcao == 3) && (!strcmp(inicio->estado.posicao.palavras, posicao)))) {
-					printf("%6d | %-20s | %7.2f | %9.2f | %-56s | %5.2f\n",
+				if (opcao == 1 || opcao == 2 || ((opcao == 3) && (inicio->estado.posicao == posicao))) {
+					printf("%6d | %-20s | %7.2f | %9.2f | %11s | %5.2f\n",
 						inicio->codigo, inicio->tipo, inicio->estado.bateria, inicio->estado.autonomia,
-						inicio->estado.posicao.palavras,
+						inicio->estado.posicao,
 						inicio->preco.precoBase);
 				}
 			}
 			inicio = inicio->seguinte;
 		}
-		printf("======================================================================================================================\n");
+		printf("=========================================================================\n");
 
 	}
 }
@@ -685,12 +697,69 @@ void listarMeioSimples(Meio* inicio, int codigo)
 		if (inicio->codigo == codigo) {
 			printf("Codigo: %d\nTipo: %s\nBateria: %.2f\nAutonomia: %.2f\nLocalizacao: %s\nPreco: %.2f\n",
 				inicio->codigo, inicio->tipo, inicio->estado.bateria, inicio->estado.autonomia,
-				inicio->estado.posicao.palavras, inicio->preco.precoBase);
+				inicio->estado.posicao, inicio->preco.precoBase);
 		}
 
 		inicio = inicio->seguinte;
 	}
 	printf("=====================================================================\n");
+}
+
+///
+///	Função para listar os dados de uma lista de meios
+///	Recebe a lista de meios, um int para verificar se o utilizador é gestor uma lista com os pontos válidos e uma string com o tipo de meio escolhido 
+///	Imprime a estrutura da lista de acordo com o tipo de utilizador
+///	Funciona como a função 'listarMeio', mas só imprime o meio se a localização estiver na lista
+///
+void listarMeioLocais(Meio* inicio, int gestor, Distancia* distancias, char* tipo)
+{
+	if (gestor == 1) {
+		printf("=================================================================================\n");
+		printf("Codigo | Tipo                 | Bateria | Autonomia | Localizacao | Preco | Hist.\n");
+		printf("=======|======================|=========|===========|=============|=======|======\n");
+
+		while (inicio != NULL)
+		{
+			Distancia* aux = distancias;
+			while (aux != NULL) {
+				if ((aux->codigoLocal == inicio->estado.posicao) && (!strcmp(inicio->tipo, tipo))) {
+					printf("%6d | %-20s | %7.2f | %9.2f | %-5d %5d | %5.2f | %-5s\n",
+						inicio->codigo, inicio->tipo, inicio->estado.bateria, inicio->estado.autonomia,
+						inicio->estado.posicao, aux->distancia, 
+						inicio->preco.precoBase, checkSN(inicio->historico));
+				}
+				aux = aux->seguinte;
+			}
+
+			inicio = inicio->seguinte;
+		}
+		printf("=================================================================================\n");
+	}
+	else {
+		printf("=========================================================================\n");
+		printf("Codigo | Tipo                 | Bateria | Autonomia | Localizacao | Preco\n");
+		printf("=======|======================|=========|===========|=============|======\n");
+
+		while (inicio != NULL)
+		{
+			if (inicio->historico == 0) {
+				Distancia* aux = distancias;
+				while (aux != NULL) {
+					if ((aux->codigoLocal == inicio->estado.posicao) && (!strcmp(inicio->tipo, tipo))) {
+						printf("%6d | %-20s | %7.2f | %9.2f | %-5d %5d | %5.2f\n",
+							inicio->codigo, inicio->tipo, inicio->estado.bateria, inicio->estado.autonomia,
+							inicio->estado.posicao, aux->distancia, 
+							inicio->preco.precoBase);
+					}
+					aux = aux->seguinte;
+				}
+			}
+
+			inicio = inicio->seguinte;
+		}
+		printf("=========================================================================\n");
+
+	}
 }
 
 ///
@@ -751,9 +820,10 @@ void listarAluguer(Aluguer* inicio, Utilizador* utilizadores, Meio* meios, int u
 }
 
 ///
-///	Função para listar os dados de uma lista de locais
-///	Recebe a lista, imprime a estrutura da lista e depois, para cada item da lista imprime os dados
-///
+///	Função para listar os dados de uma lista de locais 
+///	Recebe a lista, imprime a estrutura da lista e depois, para cada item da lista imprime os dados 
+/// Para cada local lista os caminhos ligados e a distancia
+/// 
 void listarLocais(Grafo* inicio)
 {
 	printf("===================================================================================================================\n");
@@ -773,6 +843,26 @@ void listarLocais(Grafo* inicio)
 		inicio = inicio->seguinte;
 	}
 	printf("===================================================================================================================\n");
+
+}
+
+///
+///	Função para listar os dados de uma lista de locais
+///	Recebe a lista, imprime a estrutura da lista e depois, para cada item da lista imprime os dados
+///
+void listarLocaisSimples(Grafo* inicio)
+{
+	printf("==================================================================\n");
+	printf("Codigo | Localizacao                                              \n");
+	printf("=======|==========================================================\n");
+
+	while (inicio != NULL)
+	{
+		printf("%6d | %-56s \n", inicio->codigoLocal_h, inicio->local);
+
+		inicio = inicio->seguinte;
+	}
+	printf("==================================================================\n");
 
 }
 
@@ -896,7 +986,7 @@ int alterarMeio(Meio* inicio, int codigo, char* tipo, Estado estado, float preco
 			strcpy(inicio->tipo, tipo);
 			inicio->estado.bateria = estado.bateria;
 			inicio->estado.autonomia = estado.autonomia;
-			strcpy(inicio->estado.posicao.palavras, estado.posicao.palavras);
+			inicio->estado.posicao = estado.posicao;
 
 			inicio->preco.precoBase = precoBase;
 			inicio->preco.precoAdicional = precoAdicional;
@@ -968,8 +1058,8 @@ int adicionarMeios(Meio* inicio)
 	{
 		while (inicio != NULL)
 		{
-			fprintf(fp, "%d;%s;%.2f;%.2f;%s;%.2f;%.2f;%d\n",
-				inicio->codigo, inicio->tipo, inicio->estado.bateria, inicio->estado.autonomia, inicio->estado.posicao.palavras, inicio->preco.precoBase, inicio->preco.precoAdicional, inicio->historico);
+			fprintf(fp, "%d;%s;%.2f;%.2f;%d;%.2f;%.2f;%d\n",
+				inicio->codigo, inicio->tipo, inicio->estado.bateria, inicio->estado.autonomia, inicio->estado.posicao, inicio->preco.precoBase, inicio->preco.precoAdicional, inicio->historico);
 			inicio = inicio->seguinte;
 		}
 		fclose(fp);
@@ -1031,8 +1121,8 @@ int guardarMeios(Meio* inicio)
 	{
 		while (inicio != NULL)
 		{
-			fprintf(fp, "%d;%s;%.2f;%.2f;%s;%.2f;%.2f;%d\n",
-				inicio->codigo, inicio->tipo, inicio->estado.bateria, inicio->estado.autonomia, inicio->estado.posicao.palavras, inicio->preco.precoBase, inicio->preco.precoAdicional, inicio->historico);
+			fprintf(fp, "%d;%s;%.2f;%.2f;%d;%.2f;%.2f;%d\n",
+				inicio->codigo, inicio->tipo, inicio->estado.bateria, inicio->estado.autonomia, inicio->estado.posicao, inicio->preco.precoBase, inicio->preco.precoAdicional, inicio->historico);
 			inicio = inicio->seguinte;
 		}
 		fclose(fp);
@@ -1162,6 +1252,19 @@ int existeLocal(Grafo* inicio, char* local)
 	while (inicio != NULL)
 	{
 		if (!strcmp(inicio->local, local)) {
+			return(1);
+		}
+		inicio = inicio->seguinte;
+	}
+	return(0);
+}
+
+/// Verifica se, na lista, existe um local igual ao introduzido
+int existeLocalCodigo(Grafo* inicio, int codigo)
+{
+	while (inicio != NULL)
+	{
+		if (inicio->codigoLocal_h == codigo) {
 			return(1);
 		}
 		inicio = inicio->seguinte;
@@ -1341,7 +1444,7 @@ int mG1(Utilizador* utilizadores, int codigo, char* nome, char* password, float 
 ///	Função para listar os meios de acordo com a opção escolhida pelo utilizador
 ///	Carrega os dados dos meios e ordena de acordo com a opção e depois lista os meios
 ///
-int mG2(Meio* meios, int opcao, char* posicao) {
+int mG2(Meio* meios, int opcao, int posicao, int raio, char* tipo) {
 	meios = lerMeios();
 	switch (opcao)
 	{
@@ -1355,7 +1458,27 @@ int mG2(Meio* meios, int opcao, char* posicao) {
 		ordenarMeios(meios, 1);
 		break;
 	}
-	listarMeio(meios, 1, opcao, posicao);
+
+	if (opcao == 4) {
+
+		Grafo* locais = lerLocais();
+		lerCaminhos(locais);
+		int nLocais = contaLocais(locais);
+
+		Distancia* dists = calcularDistancia(locais, posicao, raio, nLocais);
+
+		listarMeioLocais(meios, 1, dists, tipo);
+
+		freeLocais(locais);
+		freeDistancias(dists);
+
+		locais = NULL;
+		dists = NULL;
+	}
+	else {
+		listarMeio(meios, 1, opcao, posicao);
+	}
+
 	freeMeio(meios);
 	meios = NULL;
 
@@ -1518,7 +1641,7 @@ int m1(Utilizador* utilizadores, int codigo, char* nome, char* password, float s
 ///	Carrega os dados dos meios e dos alugueres e envia as listas para a função 'removerMeioAtivo'
 ///	Ordena os meios de acordo com a opção e depois lista os meios disponíveis
 ///
-int m2(Aluguer* alugueres, Meio* meios, int opcao, char* posicao) {
+int m2(Aluguer* alugueres, Meio* meios, int opcao, int posicao, int raio, char* tipo) {
 	alugueres = lerAlugueres();
 	meios = lerMeios();
 	removerMeioAtivo(meios, alugueres);
@@ -1535,7 +1658,25 @@ int m2(Aluguer* alugueres, Meio* meios, int opcao, char* posicao) {
 		break;
 	}
 
-	listarMeio(meios, 0, opcao, posicao);
+	if (opcao == 4) {
+
+		Grafo* locais = lerLocais();
+		lerCaminhos(locais);
+		int nLocais = contaLocais(locais);
+
+		Distancia* dists = calcularDistancia(locais, posicao, raio, nLocais);
+
+		listarMeioLocais(meios, 0, dists, tipo);
+
+		freeLocais(locais);
+		freeDistancias(dists);
+
+		locais = NULL;
+		dists = NULL;
+	}
+	else {
+		listarMeio(meios, 0, opcao, posicao);
+	}
 
 	freeAluguer(alugueres);
 	freeMeio(meios);

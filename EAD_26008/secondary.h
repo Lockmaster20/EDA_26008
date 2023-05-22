@@ -4,6 +4,8 @@
 #define LOC_SIZE 57	// Tamanho máximo das 3 palavras + pontos a separar
 #define INF INT_MAX // Define infinito como o valor mais alto possível de int
 
+const char* checkSN(int i);
+
 #pragma region structs
 
 typedef struct registoData {
@@ -22,7 +24,8 @@ typedef struct registoContacto {
 typedef struct registoEstado {
 	float bateria;
 	float autonomia;
-	Posicao posicao;
+	int posicao;
+	//Posicao posicao;
 } Estado;
 
 typedef struct registoPreco {
@@ -101,6 +104,8 @@ void freeCaminho(Caminho inicio);
 
 void freeLocais(Grafo* inicio);
 
+void freeDistancias(Distancia* inicio);
+
 #pragma endregion
 
 #pragma region lerDocumentos
@@ -123,6 +128,8 @@ void listarUtilizadorSimples(Utilizador* inicio, int codigo, float* saldo);
 
 void listarMeioSimples(Meio* inicio, int codigo);
 
+void listarLocaisSimples(Grafo* inicio);
+
 #pragma endregion
 
 #pragma region existeDados
@@ -135,6 +142,7 @@ int existeAluguer(Aluguer* inicio, int codigo);
 int existeAluguerMeio(Aluguer* inicio, int codigo);
 int existeAluguerAtivo(Aluguer* inicio, int codigo, int* codigoAluguer);
 int existeLocal(Grafo* inicio, char* local);
+int existeLocalCodigo(Grafo* inicio, int codigo);
 
 #pragma endregion
 
@@ -163,7 +171,7 @@ void escolherMenu(int utilizadorAtual, char* nomeAtual, int gestor);
 
 int mG1(Utilizador* utilizadores, int codigo, char* nome, char* password, float saldo, Data dataNascimento, int NIF, char* morada, int gestor);
 
-int mG2(Meio* meios, int opcao, char* posicao);
+int mG2(Meio* meios, int opcao, int posicao, int raio, char* tipo);
 
 int mG3(Meio* meios, int codigo, char* tipo, Estado estado, float precoBase, float precoAdicional);
 
@@ -187,7 +195,7 @@ int mG10(Utilizador* utilizadores, Aluguer* alugueres, Meio* meios, int utilizad
 
 int m1(Utilizador* utilizadores, int codigo, char* nome, char* password, float saldo, Data dataNascimento, int NIF, char* morada, int gestor);
 
-int m2(Aluguer* alugueres, Meio* meios, int opcao, char* posicao);
+int m2(Aluguer* alugueres, Meio* meios, int opcao, int posicao, int raio, char* tipo);
 
 int m3(Utilizador* utilizadores, Aluguer* alugueres, int codigo, int codigoUtilizador, int codigoMeio);
 

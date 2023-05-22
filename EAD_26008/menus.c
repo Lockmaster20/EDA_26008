@@ -15,11 +15,13 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 	Utilizador* utilizadores = NULL;
 	Meio* meios = NULL;
 	Aluguer* alugueres = NULL;
+	Grafo* locais = NULL;
+	Distancia* dists = NULL;
 	int sucesso = 0, existe;
 
 	//Dados introduzidos pelo utilizador
-	int opcao, opcaoList, codigo, NIF, gestor, historico, resp;
-	char utilizador[11], nome[41], password[11], morada[31], tipo[21], posicao[57];
+	int opcao, opcaoList, codigo, NIF, gestor, historico, resp, posicao, raio;
+	char utilizador[11], nome[41], password[11], morada[31], tipo[21];
 	float saldo, precoBase, precoAdicional;
 	Data dataNascimento;
 	Estado estado;
@@ -87,7 +89,7 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 			existe = 1;
 			while (existe)
 			{
-				printf("\n1. Listar Meios\n2. Listar Meios por Autonomia\n3. Listar Meios numa Localizacao\n\n0. Sair\n\n-> ");
+				printf("\n1. Listar Meios\n2. Listar Meios por Autonomia\n3. Listar Meios numa Localizacao\n4. Listar Meios numa Area\n\n0. Sair\n\n-> ");
 				scanf("%d", &opcaoList);
 				getchar();
 				switch (opcaoList) {
@@ -98,15 +100,54 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 				case 1:
 				case 2:
 					system("cls");
-					mG2(alugueres, opcaoList, NULL);
+					mG2(alugueres, opcaoList, NULL, NULL, NULL);
 					existe = 0;
 					break;
 				case 3:
-					printf("Localizacao: (palavra1.palavra2.palavra3)\n");
-					scanf("%[^\n]56s", &posicao);
-					getchar();
 					system("cls");
-					mG2(alugueres, opcaoList, posicao);
+					locais = lerLocais();
+					listarLocaisSimples(locais);
+					existe = 0;
+					while (!existe) {
+						printf("Localizacao: (codigo)\n");
+						scanf("%d", &posicao);
+						getchar();
+
+						existe = existeLocalCodigo(locais, posicao);
+					}
+					freeLocais(locais);
+					locais = NULL;
+
+					system("cls");
+					mG2(alugueres, opcaoList, posicao, NULL, NULL);
+					existe = 0;
+					break;
+				case 4:
+					system("cls");
+					locais = lerLocais();
+					listarLocaisSimples(locais);
+					existe = 0;
+					while (!existe) {
+						printf("Localizacao atual: (codigo)\n");
+						scanf("%d", &posicao);
+						getchar();
+
+						existe = existeLocalCodigo(locais, posicao);
+					}
+					freeLocais(locais);
+					locais = NULL;
+
+					printf("Tipo do meio:\n");
+					scanf("%[^\n]20s", tipo);
+					getchar();
+
+					printf("Distancia maxima do meio:\n");
+					scanf("%d", &raio);
+					getchar();
+
+					system("cls");
+					mG2(alugueres, opcaoList, posicao, raio, tipo);
+					
 					existe = 0;
 					break;
 				default:
@@ -134,9 +175,18 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 			scanf("%f", &estado.autonomia);
 			getchar();
 
-			printf("Localizacao: (palavra1.palavra2.palavra3)\n");
-			scanf("%[^\n]56s", &estado.posicao.palavras);
-			getchar();
+			locais = lerLocais();
+			listarLocaisSimples(locais);
+			existe = 0;
+			while (!existe) {
+				printf("Localizacao: (codigo)\n");
+				scanf("%d", &estado.posicao);
+				getchar();
+
+				existe = existeLocalCodigo(locais, estado.posicao);
+			}
+			freeLocais(locais);
+			locais = NULL;
 
 			printf("Preco Base:\n");
 			scanf("%f", &precoBase);
@@ -169,7 +219,8 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 					system("cls");
 					printf("\n--- Erro, o meio introduzido nao existe ---\n\n");
 				}
-			}listarMeioSimples(meios, codigo);
+			}
+			listarMeioSimples(meios, codigo);
 			freeMeio(meios);
 			meios = NULL;
 
@@ -185,9 +236,18 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 			scanf("%f", &estado.autonomia);
 			getchar();
 
-			printf("Localizacao: (palavra1.palavra2.palavra3)\n");
-			scanf("%[^\n]56s", &estado.posicao.palavras);
-			getchar();
+			locais = lerLocais();
+			listarLocaisSimples(locais);
+			existe = 0;
+			while (!existe) {
+				printf("Localizacao: (codigo)\n");
+				scanf("%d", &estado.posicao);
+				getchar();
+
+				existe = existeLocalCodigo(locais, estado.posicao);
+			}
+			freeLocais(locais);
+			locais = NULL;
 
 			printf("Preco Base:\n");
 			scanf("%f", &precoBase);
@@ -399,8 +459,11 @@ int menu(int utilizadorAtual, char* nomeAtual) {
 	Utilizador* utilizadores = NULL;
 	Meio* meios = NULL;
 	Aluguer* alugueres = NULL;
-	int opcao, sucesso = 0, existe, codigo, codigoMeio, codigoAluguer, NIF, opcaoList, resp;
-	char posicao[57], nome[41], password[11], morada[31];
+	Distancia* dists = NULL;
+	Grafo* locais = NULL;
+
+	int opcao, sucesso = 0, existe, codigo, codigoMeio, codigoAluguer, NIF, opcaoList, resp, posicao, raio;
+	char nome[41], password[11], morada[31], tipo[21];
 	float custo, saldo;
 	Data dataNascimento;
 
@@ -458,7 +521,7 @@ int menu(int utilizadorAtual, char* nomeAtual) {
 			existe = 1;
 			while (existe)
 			{
-				printf("1. Listar Meios\n2. Listar Meios por Autonomia\n3. Listar Meios numa Localizacao\n\n0. Sair\n\n-> ");
+				printf("1. Listar Meios\n2. Listar Meios por Autonomia\n3. Listar Meios numa Localizacao\n4. Listar Meios numa Area\n\n0. Sair\n\n-> ");
 				scanf("%d", &opcaoList);
 				getchar();
 				switch (opcaoList) {
@@ -467,14 +530,42 @@ int menu(int utilizadorAtual, char* nomeAtual) {
 					break;
 				case 1:
 				case 2:
-					m2(alugueres, meios, opcaoList, NULL);
+					m2(alugueres, meios, opcaoList, NULL, NULL, NULL);
 					existe = 0;
 					break;
 				case 3:
-					printf("Localizacao: (palavra1.palavra2.palavra3)\n");
-					scanf("%[^\n]56s", &posicao);
+					printf("Localizacao: (codigo)\n");
+					scanf("%d", &posicao);
 					getchar();
-					m2(alugueres, meios, opcaoList, posicao);
+					m2(alugueres, meios, opcaoList, posicao, NULL, NULL);
+					existe = 0;
+					break;
+				case 4:
+					system("cls");
+					locais = lerLocais();
+					listarLocaisSimples(locais);
+					existe = 0;
+					while (!existe) {
+						printf("Localizacao atual: (codigo)\n");
+						scanf("%d", &posicao);
+						getchar();
+
+						existe = existeLocalCodigo(locais, posicao);
+					}
+					freeLocais(locais);
+					locais = NULL;
+
+					printf("Tipo do meio:\n");
+					scanf("%[^\n]20s", tipo);
+					getchar();
+
+					printf("Distancia maxima do meio:\n");
+					scanf("%d", &raio);
+					getchar();
+
+					system("cls");
+					m2(alugueres, meios, opcaoList, posicao, raio, tipo);
+
 					existe = 0;
 					break;
 				default:

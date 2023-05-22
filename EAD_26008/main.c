@@ -7,49 +7,6 @@
 #include "secondary.h"
 
 
-void listarMeioLocais(Meio* inicio, int gestor, Distancia * distancias)
-{
-	if (gestor == 1) {
-		printf("==============================================================================================================================\n");
-		printf("Codigo | Tipo                 | Bateria | Autonomia | Localizacao                                              | Preco | Hist.\n");
-		printf("=======|======================|=========|===========|==========================================================|=======|======\n");
-
-		while (inicio != NULL)
-		{
-			while (distancias->codigoLocal =! NULL)
-			printf("%6d | %-20s | %7.2f | %9.2f | %-56s | %5.2f | %-5s\n",
-				inicio->codigo, inicio->tipo, inicio->estado.bateria, inicio->estado.autonomia,
-				inicio->estado.posicao.palavras,
-				inicio->preco.precoBase, checkSN(inicio->historico));
-			
-			inicio = inicio->seguinte;
-		}
-		printf("==============================================================================================================================\n");
-	}
-	else {
-		printf("======================================================================================================================\n");
-		printf("Codigo | Tipo                 | Bateria | Autonomia | Localizacao                                              | Preco\n");
-		printf("=======|======================|=========|===========|==========================================================|======\n");
-
-		while (inicio != NULL)
-		{
-			if (inicio->historico == 0) {
-				if (opcao == 1 || opcao == 2 || ((opcao == 3) && (!strcmp(inicio->estado.posicao.palavras, posicao)))) {
-					printf("%6d | %-20s | %7.2f | %9.2f | %-56s | %5.2f\n",
-						inicio->codigo, inicio->tipo, inicio->estado.bateria, inicio->estado.autonomia,
-						inicio->estado.posicao.palavras,
-						inicio->preco.precoBase);
-				}
-			}
-			inicio = inicio->seguinte;
-		}
-		printf("======================================================================================================================\n");
-
-	}
-}
-
-
-
 /// Pede dados de login ao utilizador, 
 /// verifica os dados introduzidos, 
 /// ao validar os dados introduzidos, altera os dados da sessão atual e devolve 1
@@ -97,7 +54,7 @@ void login(Utilizador* inicio, int* utilizadorAtual, int* gestor, char* nomeAtua
 /// depois de fazer login liberta a memória utilizada e passa para a função de escolher o menu
 main() {
 
-	/*
+	
 	Utilizador* utilizadores = NULL;
 	// Dados da sessão
 	int utilizadorAtual = 0, gestor = 0;
@@ -113,15 +70,24 @@ main() {
 			escolherMenu(utilizadorAtual, nomeAtual, gestor);
 		}
 	}
-	*/
+	
 
 
-	Grafo* grafo = lerLocais();
+	/*Grafo* grafo = lerLocais();
 	int teste = lerCaminhos(grafo);
 	int existe = existeLocal(grafo, "tile.research.goggles");
 	int nLocais = contaLocais(grafo);
 
-	listarLocais(grafo);
+	int partida = 1;
+	int limite = 600;
+	char* tipo = "Trotinete";
+
+	Meio* meio = lerMeios();
+	//ordenarMeios;
+	Distancia* dists = calcularDistancia(grafo, partida, limite, nLocais);
+
+	//listarLocais(grafo);
+	listarMeioLocais(meio, 1, dists, tipo);
 
 	freeLocais(grafo);
 	grafo = NULL;
@@ -132,5 +98,5 @@ main() {
 
 	// Distancia* dddddddd = calcularDistancia(grafo, localPartida, limite, nLocais);
 
-	int abc = 0;
+	int abc = 0;*/
 }
