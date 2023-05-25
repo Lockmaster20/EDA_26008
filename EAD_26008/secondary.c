@@ -312,6 +312,59 @@ void ordenarAlugueres(Aluguer* inicio) {
 	return;
 }
 
+///
+///	Função para trocar os dados de uma lista de caminhos para outra
+///	Recebe dados de duas listas, copia os dados da primeira lista para uma lista auxiliar
+///	Depois copia os dados da lista seguinte para a primeira lista
+///	Por fim copia os dados da lista auxiliar para a segunda lista
+///
+void trocarLocais(Grafo* inicio, Grafo* seg) {
+
+	Grafo aux;
+
+	aux.codigoLocal_h = inicio->codigoLocal_h;
+	strcpy(aux.local, inicio->local);
+	aux.caminhos = inicio->caminhos;
+
+
+	inicio->codigoLocal_h = seg->codigoLocal_h;
+	strcpy(inicio->local, seg->local);
+	inicio->caminhos = seg->caminhos;
+
+	seg->codigoLocal_h = aux.codigoLocal_h;
+	strcpy(seg->local, aux.local);
+	seg->caminhos = aux.caminhos;
+
+	return;
+}
+
+///
+///	Função para ordenar os locais
+///	Recebe a lista, se não estiver vazia verifica se o código do local seguinte é menor
+///	Se se verificar, executa a função para trocar as posições e marca que houve uma troca
+///
+void ordenarLocais(Grafo* inicio) {
+	int trocou = 1;
+	Grafo* aux;
+
+	if (inicio == NULL) return;
+
+	while (trocou) {
+		trocou = 0;
+		aux = inicio;
+
+		while (aux->seguinte != NULL)
+		{
+			if (aux->codigoLocal_h > aux->seguinte->codigoLocal_h) {
+				trocarLocais(aux, aux->seguinte);
+				trocou = 1;
+			}
+			aux = aux->seguinte;
+		}
+	}
+	return;
+}
+
 #pragma endregion
 
 #pragma region carregarDados
@@ -1266,6 +1319,27 @@ int existeLocalCodigo(Grafo* inicio, int codigo)
 	{
 		if (inicio->codigoLocal_h == codigo) {
 			return(1);
+		}
+		inicio = inicio->seguinte;
+	}
+	return(0);
+}
+
+/// Verifica se, na lista, existe um caminho igual ao introduzido
+int existeCaminho(Grafo* inicio, int origem, int destino)
+{
+	while (inicio != NULL)
+	{
+		if (inicio->codigoLocal_h == origem) {
+			Caminho aux = inicio->caminhos;
+			while (aux != NULL)
+			{
+				if (aux->codigoLocal == destino) {
+					return(1);
+				}
+
+				aux = aux->seguinte;
+			}
 		}
 		inicio = inicio->seguinte;
 	}

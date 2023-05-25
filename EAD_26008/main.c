@@ -54,7 +54,7 @@ void login(Utilizador* inicio, int* utilizadorAtual, int* gestor, char* nomeAtua
 /// depois de fazer login liberta a memória utilizada e passa para a função de escolher o menu
 main() {
 
-	
+	/*
 	Utilizador* utilizadores = NULL;
 	// Dados da sessão
 	int utilizadorAtual = 0, gestor = 0;
@@ -71,9 +71,9 @@ main() {
 		}
 	}
 	
+	*/
 
-
-	/*Grafo* grafo = lerLocais();
+	Grafo* grafo = lerLocais();
 	int teste = lerCaminhos(grafo);
 	int existe = existeLocal(grafo, "tile.research.goggles");
 	int nLocais = contaLocais(grafo);
@@ -86,8 +86,11 @@ main() {
 	//ordenarMeios;
 	Distancia* dists = calcularDistancia(grafo, partida, limite, nLocais);
 
-	//listarLocais(grafo);
-	listarMeioLocais(meio, 1, dists, tipo);
+	int tetettes = existeCaminho(grafo, 1, 12);
+
+	ordenarLocais(grafo);
+	listarLocais(grafo);
+	//listarMeioLocais(meio, 1, dists, tipo);
 
 	freeLocais(grafo);
 	grafo = NULL;
@@ -98,5 +101,5 @@ main() {
 
 	// Distancia* dddddddd = calcularDistancia(grafo, localPartida, limite, nLocais);
 
-	int abc = 0;*/
+	int abc = 0;
 }

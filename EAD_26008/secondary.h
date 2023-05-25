@@ -143,6 +143,7 @@ int existeAluguerMeio(Aluguer* inicio, int codigo);
 int existeAluguerAtivo(Aluguer* inicio, int codigo, int* codigoAluguer);
 int existeLocal(Grafo* inicio, char* local);
 int existeLocalCodigo(Grafo* inicio, int codigo);
+int existeCaminho(Grafo* inicio, int origem, int destino);
 
 #pragma endregion
 
@@ -206,3 +207,8 @@ int m5(Utilizador* utilizadores, Aluguer* alugueres, Meio* meios, int utilizador
 #pragma endregion
 
 #pragma endregion
+
+
+
+
+void ordenarLocais(Grafo* inicio);
