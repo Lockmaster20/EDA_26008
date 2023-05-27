@@ -1140,6 +1140,41 @@ int adicionarAlugueres(Aluguer* inicio)
 	else return(0);
 }
 
+/// Adiciona os dados de locais recebidos no fim do documento
+int adicionarLocais(Grafo* inicio)
+{
+	FILE* fp;
+	fp = fopen("dados/locais.txt", "a");
+	if (fp != NULL)
+	{
+		while (inicio != NULL)
+		{
+			fprintf(fp, "%d;%s\n", inicio->codigoLocal_h, inicio->local);
+
+			inicio = inicio->seguinte;
+		}
+
+		fclose(fp);
+		return(1);
+	}
+	else return(0);
+}
+
+/// Adiciona os dados de caminhos recebidos no fim do documento
+int adicionarCaminhos(int origem, int destino, int distancia)
+{
+	FILE* fp;
+	fp = fopen("dados/caminhos.txt", "a");
+	if (fp != NULL)
+	{
+		fprintf(fp, "%d;%d;%d\n", origem, destino, distancia);
+	
+		fclose(fp);
+		return(1);
+	}
+	else return(0);
+}
+
 #pragma endregion
 
 #pragma region guardarDadosDocumentos
@@ -1380,6 +1415,18 @@ int obterUltimoAluguer(Aluguer* inicio) {
 	while (inicio != NULL) {
 		if (i < inicio->codigo) {
 			i = inicio->codigo;
+		}
+		inicio = inicio->seguinte;
+	}
+	return (i);
+}
+
+/// Passa por todos os alugueres e devolve o código mais alto, devolvendo 0 se a lista estiver vazia
+int obterUltimoLocal(Grafo* inicio) {
+	int i = 0;
+	while (inicio != NULL) {
+		if (i < inicio->codigoLocal_h) {
+			i = inicio->codigoLocal_h;
 		}
 		inicio = inicio->seguinte;
 	}
@@ -1688,6 +1735,38 @@ int mG10(Utilizador* utilizadores, Aluguer* alugueres, Meio* meios, int utilizad
 	alugueres = NULL;
 
 	return 1;
+}
+
+int mG11(Grafo* locais) {
+	locais = lerLocais();
+	int resp = lerCaminhos(locais);
+	if (resp == 0) return 0;
+
+	ordenarLocais(locais);
+	listarLocais(locais);
+
+	freeLocais(locais);
+
+	locais = NULL;
+
+	return 1;
+}
+
+int mG12(Grafo* locais, int codigo, char* nomeLocal) {
+	locais = carregarLocal(locais, codigo, nomeLocal);
+
+	int resp = adicionarLocais(locais);
+
+	freeLocais(locais);
+	locais = NULL;
+
+	return resp;
+}
+
+int mG13(int origem, int destino, int distancia) {
+	int resp = adicionarCaminhos(origem, destino, distancia);
+
+	return resp;
 }
 
 #pragma endregion

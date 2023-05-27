@@ -20,8 +20,8 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 	int sucesso = 0, existe;
 
 	//Dados introduzidos pelo utilizador
-	int opcao, opcaoList, codigo, NIF, gestor, historico, resp, posicao, raio;
-	char utilizador[11], nome[41], password[11], morada[31], tipo[21];
+	int opcao, opcaoList, codigo, NIF, gestor, historico, resp, posicao, raio, origem, destino, distancia;
+	char utilizador[11], nome[41], password[11], morada[31], tipo[21], nomeLocal[LOC_SIZE];
 	float saldo, precoBase, precoAdicional;
 	Data dataNascimento;
 	Estado estado;
@@ -29,7 +29,7 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 	system("cls");
 	while (sucesso != 1) {
 		printf(" %s -- Menu de Gestor:\n\n", nomeAtual);
-		printf("1. Alterar Dados Pessoais\n\n --- Meios\n2. Listar Meios\n3. Adicionar Meio\n4. Editar Meio\n5. Remover Meio\n\n --- Utilizadores\n6. Listar Utilizadores\n7. Adicionar Utilizador\n8. Editar Utilizador\n9. Remover Utilizador\n\n --- Alugueres\n10. Listar Alugueres\n\n0. Sair\n\n-> ");
+		printf("1. Alterar Dados Pessoais\n\n --- Meios\n2. Listar Meios\n3. Adicionar Meio\n4. Editar Meio\n5. Remover Meio\n\n --- Utilizadores\n6. Listar Utilizadores\n7. Adicionar Utilizador\n8. Editar Utilizador\n9. Remover Utilizador\n\n --- Alugueres\n10. Listar Alugueres\n\n --- Grafo\n11. Listar Locais\n12. Adicionar Local\n13. Adicionar Caminho\n\n0. Sair\n\n-> ");
 
 		scanf("%d", &opcao);
 		getchar();
@@ -443,6 +443,67 @@ int menuGestor(int utilizadorAtual, char* nomeAtual) {
 		case 10:
 			system("cls");
 			mG10(utilizadores, alugueres, meios, utilizadorAtual);
+			break;
+		case 11:
+			system("cls");
+			mG11(locais);
+			break;
+		case 12:
+			system("cls");
+
+			locais = lerLocais();
+			codigo = obterUltimoLocal(locais) + 1;
+			existe = 1;
+			while (existe) {
+				printf("Localizacao: (Palava1.Palavra2.Palavra3)\n");
+				scanf("%[^\n]56s", nomeLocal);
+				getchar();
+
+				existe = existeLocal(locais, nomeLocal);
+			}
+			freeLocais(locais);
+			locais = NULL;
+
+			system("cls");
+			resp = mG12(locais, codigo, nomeLocal);
+			if (resp == 1)
+				printf("\n--- Local criado com sucesso ---\n\n");
+			else
+				printf("\n--- Erro ao criar o local ---\n\n");
+			break;
+		case 13:
+			system("cls");
+
+			locais = lerLocais();
+			existe = 0;
+			while (!existe) {
+				printf("Local Origem: (Codigo)\n");
+				scanf("%d", &origem);
+				getchar();
+
+				existe = existeLocalCodigo(locais, origem);
+			}
+			existe = 0;
+			while (!existe) {
+				printf("Local Destino: (Codigo)\n");
+				scanf("%d", &destino);
+				getchar();
+
+				existe = existeLocalCodigo(locais, destino);
+			}
+			freeLocais(locais);
+			locais = NULL;
+
+			printf("Distancia:\n");
+			scanf("%d", &distancia);
+			getchar();
+
+			system("cls");
+			resp = mG13(origem, destino, distancia);
+			if (resp == 1)
+				printf("\n--- Caminho criado com sucesso ---\n\n");
+			else
+				printf("\n--- Erro ao criar o caminho ---\n\n");
 			break;
 		default:
 			system("cls");

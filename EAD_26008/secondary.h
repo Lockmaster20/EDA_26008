@@ -152,6 +152,7 @@ int existeCaminho(Grafo* inicio, int origem, int destino);
 int obterUltimoUtilizador(Utilizador* inicio);
 int obterUltimoMeio(Meio* inicio);
 int obterUltimoAluguer(Aluguer* inicio);
+int obterUltimoLocal(Grafo* inicio);
 
 #pragma endregion
 
@@ -189,6 +190,12 @@ int mG8(Utilizador* utilizadores, int codigo, char* nome, char* password, float 
 int mG9(Utilizador* utilizadores, int codigo);
 
 int mG10(Utilizador* utilizadores, Aluguer* alugueres, Meio* meios, int utilizadorAtual);
+
+int mG11(Grafo* locais);
+
+int mG12(Grafo* locais, int codigo, char* nomeLocal);
+
+int mG13(int origem, int destino, int distancia);
 
 #pragma endregion
 

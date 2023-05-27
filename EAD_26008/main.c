@@ -54,7 +54,7 @@ void login(Utilizador* inicio, int* utilizadorAtual, int* gestor, char* nomeAtua
 /// depois de fazer login liberta a memória utilizada e passa para a função de escolher o menu
 main() {
 
-	/*
+	
 	Utilizador* utilizadores = NULL;
 	// Dados da sessão
 	int utilizadorAtual = 0, gestor = 0;
@@ -71,8 +71,11 @@ main() {
 		}
 	}
 	
-	*/
+	
 
+
+	/*
+	#pragma region testes
 	Grafo* grafo = lerLocais();
 	int teste = lerCaminhos(grafo);
 	int existe = existeLocal(grafo, "tile.research.goggles");
@@ -102,4 +105,6 @@ main() {
 	// Distancia* dddddddd = calcularDistancia(grafo, localPartida, limite, nLocais);
 
 	int abc = 0;
+	#pragma endregion
+	*/
 }
