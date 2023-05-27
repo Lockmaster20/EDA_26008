@@ -1570,12 +1570,11 @@ int mG2(Meio* meios, int opcao, int posicao, int raio, char* tipo) {
 	switch (opcao)
 	{
 	case 1:
-		ordenarMeios(meios, opcao);
-		break;
 	case 2:
 		ordenarMeios(meios, opcao);
 		break;
 	case 3:
+	case 4:
 		ordenarMeios(meios, 1);
 		break;
 	}
@@ -1801,12 +1800,11 @@ int m2(Aluguer* alugueres, Meio* meios, int opcao, int posicao, int raio, char* 
 	switch (opcao)
 	{
 	case 1:
-		ordenarMeios(meios, opcao);
-		break;
 	case 2:
 		ordenarMeios(meios, opcao);
 		break;
 	case 3:
+	case 4:
 		ordenarMeios(meios, 1);
 		break;
 	}
