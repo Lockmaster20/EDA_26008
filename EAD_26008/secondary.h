@@ -87,6 +87,7 @@ typedef struct registoDistancia
 {
 	int codigoLocal;
 	int distancia;
+	Caminho caminhos;
 	struct registoDistancia* seguinte;
 } Distancia;
 
@@ -214,8 +215,3 @@ int m5(Utilizador* utilizadores, Aluguer* alugueres, Meio* meios, int utilizador
 #pragma endregion
 
 #pragma endregion
-
-
-
-
-void ordenarLocais(Grafo* inicio);

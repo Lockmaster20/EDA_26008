@@ -453,22 +453,18 @@ Grafo* carregarLocal(Grafo* inicio, int codLocal, char* local) {
 
 int carregarCaminho(Grafo* inicio, int origem, int destino, int distancia) {
 	Caminho novo;
-	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	//if (existeVertice(inicio, origem) && existeVertice(inicio, destino))
-	//{
-		while (inicio->codigoLocal_h != origem) inicio = inicio->seguinte;
-		novo = malloc(sizeof(struct registoCaminhos));
-		if (novo != NULL)
-		{
-			novo->codigoLocal = destino;
-			novo->distancia = distancia;
-			novo->seguinte = inicio->caminhos;
-			inicio->caminhos = novo;
-			return(1);
-		}
-		else return(0);
-	//}
-	//else return(0);
+
+	while (inicio->codigoLocal_h != origem) inicio = inicio->seguinte;
+	novo = malloc(sizeof(struct registoCaminhos));
+	if (novo != NULL)
+	{
+		novo->codigoLocal = destino;
+		novo->distancia = distancia;
+		novo->seguinte = inicio->caminhos;
+		inicio->caminhos = novo;
+		return(1);
+	}
+	else return(0);
 }
 
 #pragma endregion
@@ -701,40 +697,40 @@ void listarUtilizadorSimples(Utilizador* inicio, int codigo, float* saldo)
 void listarMeio(Meio* inicio, int gestor, int opcao, int posicao)
 {
 	if (gestor == 1) {
-		printf("=================================================================================\n");
-		printf("Codigo | Tipo                 | Bateria | Autonomia | Localizacao | Preco | Hist.\n");
-		printf("=======|======================|=========|===========|=============|=======|======\n");
+		printf("=============================================================================================\n");
+		printf("Codigo | Tipo                 | Bateria | Autonomia | Localizacao | Preco             | Hist.\n");
+		printf("=======|======================|=========|===========|=============|===================|======\n");
 
 		while (inicio != NULL)
 		{
 			if (opcao == 1 || opcao == 2 || ((opcao == 3) && (inicio->estado.posicao == posicao))) {
-				printf("%6d | %-20s | %7.2f | %9.2f | %11d | %5.2f | %-5s\n",
+				printf("%6d | %-20s | %7.2f | %9.2f | %11d | %5.2f + %5.2f/min | %-5s\n",
 					inicio->codigo, inicio->tipo, inicio->estado.bateria, inicio->estado.autonomia,
 					inicio->estado.posicao,
-					inicio->preco.precoBase, checkSN(inicio->historico));
+					inicio->preco.precoBase, inicio->preco.precoAdicional, checkSN(inicio->historico));
 			}
 			inicio = inicio->seguinte;
 		}
-		printf("=================================================================================\n");
+		printf("=============================================================================================\n");;
 	}
 	else {
-		printf("=========================================================================\n");
+		printf("=====================================================================================\n");
 		printf("Codigo | Tipo                 | Bateria | Autonomia | Localizacao | Preco\n");
-		printf("=======|======================|=========|===========|=============|======\n");
+		printf("=======|======================|=========|===========|=============|==================\n");
 
 		while (inicio != NULL)
 		{
 			if (inicio->historico == 0) {
 				if (opcao == 1 || opcao == 2 || ((opcao == 3) && (inicio->estado.posicao == posicao))) {
-					printf("%6d | %-20s | %7.2f | %9.2f | %11s | %5.2f\n",
+					printf("%6d | %-20s | %7.2f | %9.2f | %11d | %5.2f + %5.2f/min\n",
 						inicio->codigo, inicio->tipo, inicio->estado.bateria, inicio->estado.autonomia,
 						inicio->estado.posicao,
-						inicio->preco.precoBase);
+						inicio->preco.precoBase, inicio->preco.precoAdicional);
 				}
 			}
 			inicio = inicio->seguinte;
 		}
-		printf("=========================================================================\n");
+		printf("=====================================================================================\n");
 
 	}
 }
@@ -758,6 +754,19 @@ void listarMeioSimples(Meio* inicio, int codigo)
 	printf("=====================================================================\n");
 }
 
+/// Imprime o caminho
+void printCaminho(Caminho inicio) 
+{
+	while (inicio != NULL)
+	{
+		printf("%d", inicio->codigoLocal);
+		inicio = inicio->seguinte;
+		if (inicio != NULL) {
+			printf("->");
+		}
+	}
+}
+
 ///
 ///	Função para listar os dados de uma lista de meios
 ///	Recebe a lista de meios, um int para verificar se o utilizador é gestor uma lista com os pontos válidos e uma string com o tipo de meio escolhido 
@@ -767,31 +776,33 @@ void listarMeioSimples(Meio* inicio, int codigo)
 void listarMeioLocais(Meio* inicio, int gestor, Distancia* distancias, char* tipo)
 {
 	if (gestor == 1) {
-		printf("=================================================================================\n");
-		printf("Codigo | Tipo                 | Bateria | Autonomia | Localizacao | Preco | Hist.\n");
-		printf("=======|======================|=========|===========|=============|=======|======\n");
+		printf("====================================================================================================================\n");
+		printf("Codigo | Tipo                 | Bateria | Autonomia | Localizacao | Preco             | Hist. | Caminho\n");
+		printf("=======|======================|=========|===========|=============|===================|=======|=====================\n");
 
 		while (inicio != NULL)
 		{
 			Distancia* aux = distancias;
 			while (aux != NULL) {
 				if ((aux->codigoLocal == inicio->estado.posicao) && (!strcmp(inicio->tipo, tipo))) {
-					printf("%6d | %-20s | %7.2f | %9.2f | %-5d %5d | %5.2f | %-5s\n",
+					printf("%6d | %-20s | %7.2f | %9.2f | %-5d %5d | %5.2f + %5.2f/min | %-5s | ",
 						inicio->codigo, inicio->tipo, inicio->estado.bateria, inicio->estado.autonomia,
 						inicio->estado.posicao, aux->distancia, 
-						inicio->preco.precoBase, checkSN(inicio->historico));
+						inicio->preco.precoBase, inicio->preco.precoAdicional, checkSN(inicio->historico));
+					printCaminho(aux->caminhos);
+					printf("\n");
 				}
 				aux = aux->seguinte;
 			}
 
 			inicio = inicio->seguinte;
 		}
-		printf("=================================================================================\n");
+		printf("====================================================================================================================\n");
 	}
 	else {
-		printf("=========================================================================\n");
-		printf("Codigo | Tipo                 | Bateria | Autonomia | Localizacao | Preco\n");
-		printf("=======|======================|=========|===========|=============|======\n");
+		printf("============================================================================================================\n");
+		printf("Codigo | Tipo                 | Bateria | Autonomia | Localizacao | Preco             | Caminho\n");
+		printf("=======|======================|=========|===========|=============|===================|=====================\n");
 
 		while (inicio != NULL)
 		{
@@ -799,10 +810,12 @@ void listarMeioLocais(Meio* inicio, int gestor, Distancia* distancias, char* tip
 				Distancia* aux = distancias;
 				while (aux != NULL) {
 					if ((aux->codigoLocal == inicio->estado.posicao) && (!strcmp(inicio->tipo, tipo))) {
-						printf("%6d | %-20s | %7.2f | %9.2f | %-5d %5d | %5.2f\n",
+						printf("%6d | %-20s | %7.2f | %9.2f | %-5d %5d | %5.2f + %5.2f/min | ",
 							inicio->codigo, inicio->tipo, inicio->estado.bateria, inicio->estado.autonomia,
 							inicio->estado.posicao, aux->distancia, 
-							inicio->preco.precoBase);
+							inicio->preco.precoBase, inicio->preco.precoAdicional);
+						printCaminho(aux->caminhos);
+						printf("\n");
 					}
 					aux = aux->seguinte;
 				}
@@ -810,7 +823,7 @@ void listarMeioLocais(Meio* inicio, int gestor, Distancia* distancias, char* tip
 
 			inicio = inicio->seguinte;
 		}
-		printf("=========================================================================\n");
+		printf("===========================================================================================================\n");
 
 	}
 }
@@ -1465,15 +1478,35 @@ int calcDistanciaMin(int* distLocal, bool* visitLocal, int nLocais) {
 	return minIndex;
 }
 
+Caminho caminhoDistancia(int cloc, Caminho cam) {
+	Caminho aux = malloc(sizeof(struct registoCaminhos));
+
+	if (aux != NULL)
+	{
+		aux->codigoLocal = cloc;
+		aux->distancia = NULL;
+		aux->seguinte = cam;
+		cam = aux;
+	}
+	return cam;
+}
+
 /// Insere um novo registo na lista das distancias
-Distancia* carregarDistancia(Distancia* inicio, int codLocal, int distancia) {
+Distancia* carregarDistancia(Distancia* inicio, int codLocal, int distancia, int* anterior) {
 	Distancia* novo = malloc(sizeof(struct registoDistancia));
+	Caminho aux = NULL;
 
 	if (novo != NULL)
 	{
 		novo->codigoLocal = codLocal;
 		novo->distancia = distancia;
-
+		int v = codLocal - 1;
+		while (v != -1) {
+			aux = caminhoDistancia(v + 1, aux);
+			v = anterior[v];
+		}
+		novo->caminhos = aux;
+		
 		novo->seguinte = inicio;
 		return(novo);
 	}
@@ -1489,11 +1522,13 @@ Distancia* calcularDistancia(Grafo* grafo, int lPartida, int limite, int nLocais
 	// Alocar memória para os arrays de acordo com o número de locais
 	int* distLocal = (int*)malloc(nLocais * sizeof(int));	// Guarda a distancia desde o ponto de partida
 	bool* visitLocal = (bool*)malloc(nLocais * sizeof(bool));	// Guarda se o local já foi "visitado"
+	int* anterior = (int*)malloc(nLocais * sizeof(int)); //!!!!!!!!
 
 	// Para cada local define a distancia como "infinito" e visitado como falso
 	for (int i = 0; i < nLocais; ++i) {
 		distLocal[i] = INF;
 		visitLocal[i] = false;
+		anterior[i] = -1; //!!!!!!!!
 	}
 
 	// Altera a distancia do ponto de origem para 0
@@ -1503,8 +1538,7 @@ Distancia* calcularDistancia(Grafo* grafo, int lPartida, int limite, int nLocais
 	for (int l = 0; l < nLocais; l++) {
 
 		// u = local não visitado com a menor distancia aos locais visitados
-		int u = calcDistanciaMin
-		(distLocal, visitLocal, nLocais);
+		int u = calcDistanciaMin(distLocal, visitLocal, nLocais);
 		visitLocal[u] = true;
 
 		Grafo* aux = grafo;
@@ -1521,6 +1555,7 @@ Distancia* calcularDistancia(Grafo* grafo, int lPartida, int limite, int nLocais
 
 			if (!visitLocal[v] && distLocal[u] + distancia < distLocal[v]) {
 				distLocal[v] = distLocal[u] + distancia;
+				anterior[v] = u;
 			}
 			camAtual = camAtual->seguinte;
 		}
@@ -1530,12 +1565,13 @@ Distancia* calcularDistancia(Grafo* grafo, int lPartida, int limite, int nLocais
 	Distancia* dist = NULL;
 	for (int i = 1; i <= nLocais; i++) {
 		if (distLocal[i - 1] <= limite)
-			dist = carregarDistancia(dist, i, distLocal[i - 1]);
+			dist = carregarDistancia(dist, i, distLocal[i - 1], anterior);
 	}
 
 	// Liberta memória alocada
 	free(distLocal);
 	free(visitLocal);
+	free(anterior);
 
 	return dist;
 }
