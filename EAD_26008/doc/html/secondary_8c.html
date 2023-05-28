@@ -181,6 +181,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a7858b4e7f7222f17e9b90c2088457ec7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="secondary_8c.html#a7858b4e7f7222f17e9b90c2088457ec7">listarMeioSimples</a> (<a class="el" href="secondary_8h.html#ac364e4a0444edd49149199514bc9dd4c">Meio</a> *inicio, int codigo)</td></tr>
 <tr class="memdesc:a7858b4e7f7222f17e9b90c2088457ec7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Imprime os dados correspondentes ao codigo do meio recebido.  <br /></td></tr>
 <tr class="separator:a7858b4e7f7222f17e9b90c2088457ec7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a775416687ae7d413bbc12860780a655a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="secondary_8c.html#a775416687ae7d413bbc12860780a655a">printCaminho</a> (<a class="el" href="secondary_8h.html#a8374b42fc45f19c12a8457bfeb9af6ba">Caminho</a> inicio)</td></tr>
+<tr class="memdesc:a775416687ae7d413bbc12860780a655a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Imprime o caminho.  <br /></td></tr>
+<tr class="separator:a775416687ae7d413bbc12860780a655a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a810cd4e0a043b8480a011b0472e0ffdf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="secondary_8c.html#a810cd4e0a043b8480a011b0472e0ffdf">listarMeioLocais</a> (<a class="el" href="secondary_8h.html#ac364e4a0444edd49149199514bc9dd4c">Meio</a> *inicio, int gestor, <a class="el" href="secondary_8h.html#ab9f729b4720155264447773921e0cffb">Distancia</a> *distancias, char *tipo)</td></tr>
 <tr class="separator:a810cd4e0a043b8480a011b0472e0ffdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53117322c2d7aaf32ed4d219f6ab99d7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="secondary_8c.html#a53117322c2d7aaf32ed4d219f6ab99d7">listarAluguer</a> (<a class="el" href="secondary_8h.html#a0988c89b37fa92ee97b561cd36f0e1ad">Aluguer</a> *inicio, <a class="el" href="secondary_8h.html#a14377d6dce093321152a2f081a6a2f46">Utilizador</a> *utilizadores, <a class="el" href="secondary_8h.html#ac364e4a0444edd49149199514bc9dd4c">Meio</a> *meios, int utilizadorAtual, int gestor)</td></tr>
@@ -286,9 +289,11 @@ Functions</h2></td></tr>
 <tr class="memitem:aba8125c21da54dc31bc2483d6d8e8658"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="secondary_8c.html#aba8125c21da54dc31bc2483d6d8e8658">calcDistanciaMin</a> (int *distLocal, bool *visitLocal, int nLocais)</td></tr>
 <tr class="memdesc:aba8125c21da54dc31bc2483d6d8e8658"><td class="mdescLeft">&#160;</td><td class="mdescRight">Função para encontar o local com o caminho mais curto entre locais não visitados.  <br /></td></tr>
 <tr class="separator:aba8125c21da54dc31bc2483d6d8e8658"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae12a1131e0c6afcd6145e35589d4581d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="secondary_8h.html#ab9f729b4720155264447773921e0cffb">Distancia</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="secondary_8c.html#ae12a1131e0c6afcd6145e35589d4581d">carregarDistancia</a> (<a class="el" href="secondary_8h.html#ab9f729b4720155264447773921e0cffb">Distancia</a> *inicio, int codLocal, int distancia)</td></tr>
-<tr class="memdesc:ae12a1131e0c6afcd6145e35589d4581d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Insere um novo registo na lista das distancias.  <br /></td></tr>
-<tr class="separator:ae12a1131e0c6afcd6145e35589d4581d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9722fea5c058177de413981c6294b377"><td class="memItemLeft" align="right" valign="top"><a class="el" href="secondary_8h.html#a8374b42fc45f19c12a8457bfeb9af6ba">Caminho</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="secondary_8c.html#a9722fea5c058177de413981c6294b377">caminhoDistancia</a> (int cloc, <a class="el" href="secondary_8h.html#a8374b42fc45f19c12a8457bfeb9af6ba">Caminho</a> cam)</td></tr>
+<tr class="separator:a9722fea5c058177de413981c6294b377"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a5c5e5b1f8291d160f2268f481034e3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="secondary_8h.html#ab9f729b4720155264447773921e0cffb">Distancia</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="secondary_8c.html#a5a5c5e5b1f8291d160f2268f481034e3">carregarDistancia</a> (<a class="el" href="secondary_8h.html#ab9f729b4720155264447773921e0cffb">Distancia</a> *inicio, int codLocal, int distancia, int *anterior)</td></tr>
+<tr class="memdesc:a5a5c5e5b1f8291d160f2268f481034e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Insere um novo registo na lista das distancias.  <br /></td></tr>
+<tr class="separator:a5a5c5e5b1f8291d160f2268f481034e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5b6cb646d613eb27f3a2fdcd73f72e4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="secondary_8h.html#ab9f729b4720155264447773921e0cffb">Distancia</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="secondary_8c.html#ad5b6cb646d613eb27f3a2fdcd73f72e4">calcularDistancia</a> (<a class="el" href="secondary_8h.html#acb9a0430aa5dc7996f1920cbe941d087">Grafo</a> *grafo, int lPartida, int limite, int nLocais)</td></tr>
 <tr class="separator:ad5b6cb646d613eb27f3a2fdcd73f72e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a656bd7397a5bdb51d54530e438904608"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="secondary_8c.html#a656bd7397a5bdb51d54530e438904608">mG1</a> (<a class="el" href="secondary_8h.html#a14377d6dce093321152a2f081a6a2f46">Utilizador</a> *utilizadores, int codigo, char *nome, char *password, float saldo, <a class="el" href="secondary_8h.html#a842f0df1a7304bce6cae98475baf4ed4">Data</a> dataNascimento, int NIF, char *morada, int gestor)</td></tr>
@@ -792,7 +797,37 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Função para calcular a distancia do local de partida até aos restantes pontos do grafo, recebe o grafo, o local de partida e o número total de locais se os locais estiverem dentro do limite carrega na estrutura de distancias </p>
+<p>!!!!!!!</p>
+<p>!!!!!!!</p>
 <p>Para cada caminho v desde o local u, verifica se passar pelo ponto u reduz a distancia comparado a um valor armazenado se se verificar, atualiza para o menor valor</p>
+
+</div>
+</div>
+<a id="a9722fea5c058177de413981c6294b377" name="a9722fea5c058177de413981c6294b377"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9722fea5c058177de413981c6294b377">&#9670;&#160;</a></span>caminhoDistancia()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="secondary_8h.html#a8374b42fc45f19c12a8457bfeb9af6ba">Caminho</a> caminhoDistancia </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>cloc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="secondary_8h.html#a8374b42fc45f19c12a8457bfeb9af6ba">Caminho</a>&#160;</td>
+          <td class="paramname"><em>cam</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -902,8 +937,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ae12a1131e0c6afcd6145e35589d4581d" name="ae12a1131e0c6afcd6145e35589d4581d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae12a1131e0c6afcd6145e35589d4581d">&#9670;&#160;</a></span>carregarDistancia()</h2>
+<a id="a5a5c5e5b1f8291d160f2268f481034e3" name="a5a5c5e5b1f8291d160f2268f481034e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a5c5e5b1f8291d160f2268f481034e3">&#9670;&#160;</a></span>carregarDistancia()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -924,7 +959,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>distancia</em>&#160;</td>
+          <td class="paramname"><em>distancia</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>anterior</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -3017,6 +3058,26 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Função para ordenar os utilizadores Recebe a lista, se não estiver vazia verifica se o código do utilizador seguinte é menor Se se verificar, executa a função para trocar as posições e marca que houve uma troca </p>
+
+</div>
+</div>
+<a id="a775416687ae7d413bbc12860780a655a" name="a775416687ae7d413bbc12860780a655a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a775416687ae7d413bbc12860780a655a">&#9670;&#160;</a></span>printCaminho()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void printCaminho </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="secondary_8h.html#a8374b42fc45f19c12a8457bfeb9af6ba">Caminho</a>&#160;</td>
+          <td class="paramname"><em>inicio</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Imprime o caminho. </p>
 
 </div>
 </div>

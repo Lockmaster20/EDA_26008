@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['removermeioativo_0',['removerMeioAtivo',['../secondary_8c.html#a6bd79818435fb32fc59ee9618886683e',1,'secondary.c']]]
+  ['printcaminho_0',['printCaminho',['../secondary_8c.html#a775416687ae7d413bbc12860780a655a',1,'secondary.c']]]
 ];

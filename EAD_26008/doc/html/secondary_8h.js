@@ -75,6 +75,5 @@ var secondary_8h =
     [ "obterUltimoAluguer", "secondary_8h.html#a4235651c0a70031231837ad630134217", null ],
     [ "obterUltimoLocal", "secondary_8h.html#a8a430677cdb1074ac9b28f4cea8f735c", null ],
     [ "obterUltimoMeio", "secondary_8h.html#a275611f587f64101c809821f3382181d", null ],
-    [ "obterUltimoUtilizador", "secondary_8h.html#a118a834d6e5aadb857e72ec1f87b27d8", null ],
-    [ "ordenarLocais", "secondary_8h.html#a93304e09ac88558802957b102f67c720", null ]
+    [ "obterUltimoUtilizador", "secondary_8h.html#a118a834d6e5aadb857e72ec1f87b27d8", null ]
 ];

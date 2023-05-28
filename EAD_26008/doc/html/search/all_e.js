@@ -7,5 +7,6 @@ var searchData=
   ['preco_4',['preco',['../structregisto_meio.html#ad1017e1b1787ba61193ae9d225100f6d',1,'registoMeio']]],
   ['preco_5',['Preco',['../secondary_8h.html#a4fa6f3bbd637e3ce2b54893674c96e0f',1,'secondary.h']]],
   ['precoadicional_6',['precoAdicional',['../structregisto_preco.html#a76f390a9f0c70dd8ecde7882b382cfd1',1,'registoPreco']]],
-  ['precobase_7',['precoBase',['../structregisto_preco.html#ab5376a557014c3e6bb81298389a0281e',1,'registoPreco']]]
+  ['precobase_7',['precoBase',['../structregisto_preco.html#ab5376a557014c3e6bb81298389a0281e',1,'registoPreco']]],
+  ['printcaminho_8',['printCaminho',['../secondary_8c.html#a775416687ae7d413bbc12860780a655a',1,'secondary.c']]]
 ];

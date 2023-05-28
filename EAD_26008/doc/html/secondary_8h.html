@@ -250,7 +250,6 @@ Functions</h2></td></tr>
 <tr class="memdesc:aba8125c21da54dc31bc2483d6d8e8658"><td class="mdescLeft">&#160;</td><td class="mdescRight">Função para encontar o local com o caminho mais curto entre locais não visitados.  <br /></td></tr>
 <tr class="separator:aba8125c21da54dc31bc2483d6d8e8658"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae12a1131e0c6afcd6145e35589d4581d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="secondary_8h.html#ab9f729b4720155264447773921e0cffb">Distancia</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="secondary_8h.html#ae12a1131e0c6afcd6145e35589d4581d">carregarDistancia</a> (<a class="el" href="secondary_8h.html#ab9f729b4720155264447773921e0cffb">Distancia</a> *inicio, int codLocal, int distancia)</td></tr>
-<tr class="memdesc:ae12a1131e0c6afcd6145e35589d4581d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Insere um novo registo na lista das distancias.  <br /></td></tr>
 <tr class="separator:ae12a1131e0c6afcd6145e35589d4581d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5b6cb646d613eb27f3a2fdcd73f72e4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="secondary_8h.html#ab9f729b4720155264447773921e0cffb">Distancia</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="secondary_8h.html#ad5b6cb646d613eb27f3a2fdcd73f72e4">calcularDistancia</a> (<a class="el" href="secondary_8h.html#acb9a0430aa5dc7996f1920cbe941d087">Grafo</a> *grafo, int lPartida, int limite, int nLocais)</td></tr>
 <tr class="separator:ad5b6cb646d613eb27f3a2fdcd73f72e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -294,8 +293,6 @@ Functions</h2></td></tr>
 <tr class="separator:a949c850680757eff74fb4ca09e762e4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a95ddc01c82a69a9278d5cdd7778f5cf0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="secondary_8h.html#a95ddc01c82a69a9278d5cdd7778f5cf0">m5</a> (<a class="el" href="secondary_8h.html#a14377d6dce093321152a2f081a6a2f46">Utilizador</a> *utilizadores, <a class="el" href="secondary_8h.html#a0988c89b37fa92ee97b561cd36f0e1ad">Aluguer</a> *alugueres, <a class="el" href="secondary_8h.html#ac364e4a0444edd49149199514bc9dd4c">Meio</a> *meios, int utilizadorAtual)</td></tr>
 <tr class="separator:a95ddc01c82a69a9278d5cdd7778f5cf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a93304e09ac88558802957b102f67c720"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="secondary_8h.html#a93304e09ac88558802957b102f67c720">ordenarLocais</a> (<a class="el" href="secondary_8h.html#acb9a0430aa5dc7996f1920cbe941d087">Grafo</a> *inicio)</td></tr>
-<tr class="separator:a93304e09ac88558802957b102f67c720"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a12c2040f25d8e3a7b9e1c2024c618cb6" name="a12c2040f25d8e3a7b9e1c2024c618cb6"></a>
@@ -557,6 +554,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Função para calcular a distancia do local de partida até aos restantes pontos do grafo, recebe o grafo, o local de partida e o número total de locais se os locais estiverem dentro do limite carrega na estrutura de distancias </p>
+<p>!!!!!!!</p>
+<p>!!!!!!!</p>
 <p>Para cada caminho v desde o local u, verifica se passar pelo ponto u reduz a distancia comparado a um valor armazenado se se verificar, atualiza para o menor valor</p>
 
 </div>
@@ -592,8 +591,6 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Insere um novo registo na lista das distancias. </p>
 
 </div>
 </div>
@@ -2189,25 +2186,6 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Passa por todos os utilizadores e devolve o código mais alto, devolvendo 0 se a lista estiver vazia. </p>
-
-</div>
-</div>
-<a id="a93304e09ac88558802957b102f67c720" name="a93304e09ac88558802957b102f67c720"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a93304e09ac88558802957b102f67c720">&#9670;&#160;</a></span>ordenarLocais()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ordenarLocais </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="secondary_8h.html#acb9a0430aa5dc7996f1920cbe941d087">Grafo</a> *&#160;</td>
-          <td class="paramname"><em>inicio</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Função para ordenar os locais Recebe a lista, se não estiver vazia verifica se o código do local seguinte é menor Se se verificar, executa a função para trocar as posições e marca que houve uma troca </p>
 
 </div>
 </div>
